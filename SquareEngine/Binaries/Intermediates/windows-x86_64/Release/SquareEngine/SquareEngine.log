@@ -1,0 +1,27 @@
+﻿  Camera.cpp
+  Debug.cpp
+  Mesh.cpp
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEngine\src\Mesh.cpp(7,39): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+  Renderer.cpp
+  ShaderProgram.cpp
+  Texture2D.cpp
+  Window.cpp
+  main.cpp
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEngine\src\main.cpp(111,93): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEngine\src\main.cpp(111,93): warning C4244:         with
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEngine\src\main.cpp(111,93): warning C4244:         [
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEngine\src\main.cpp(111,93): warning C4244:             T=float
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEngine\src\main.cpp(111,93): warning C4244:         ]
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEngine\src\main.cpp(112,92): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEngine\src\main.cpp(112,92): warning C4244:         with
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEngine\src\main.cpp(112,92): warning C4244:         [
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEngine\src\main.cpp(112,92): warning C4244:             T=float
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEngine\src\main.cpp(112,92): warning C4244:         ]
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEngine\src\main.cpp(113,96): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEngine\src\main.cpp(113,96): warning C4244:         with
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEngine\src\main.cpp(113,96): warning C4244:         [
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEngine\src\main.cpp(113,96): warning C4244:             T=float
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEngine\src\main.cpp(113,96): warning C4244:         ]
+  Generating Code...
+  glad.c
+  SquareEngine.vcxproj -> D:\dev\SquareEngine\SquareEngine\SquareEngine\Binaries\windows-x86_64\Release\SquareEngine\SquareEngine.exe
