@@ -1,1 +1,7 @@
-﻿  SquareEditor.vcxproj -> D:\dev\SquareEngine\SquareEngine\SquareEngine\Binaries\windows-x86_64\Release\SquareEditor\SquareEditor.exe
+﻿  EditorLayer.cpp
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEditor\src\EditorLayer.cpp(59,94): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEditor\src\EditorLayer.cpp(59,94): warning C4244:         with
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEditor\src\EditorLayer.cpp(59,94): warning C4244:         [
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEditor\src\EditorLayer.cpp(59,94): warning C4244:             T=float
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEditor\src\EditorLayer.cpp(59,94): warning C4244:         ]
+  SquareEditor.vcxproj -> D:\dev\SquareEngine\SquareEngine\SquareEngine\Binaries\windows-x86_64\Release\SquareEditor\SquareEditor.exe
