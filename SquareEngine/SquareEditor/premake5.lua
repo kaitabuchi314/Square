@@ -1,24 +1,25 @@
-project "SquareEngine"
-   kind "StaticLib"
+project "SquareEditor"
+   kind "ConsoleApp"
    language "C++"
    cppdialect "C++20"
    targetdir "Binaries/%{cfg.buildcfg}"
    staticruntime "off"
 
-   files { "src/**.h", "src/**.cpp", "vendor/glad/**.c" }
+   files { "src/**.h", "src/**.cpp" }
 
    includedirs
    {
 	
 	"src",
-    "vendor/include-glfw",
-    "vendor/include-glad",
-    "vendor/include"
+    "../SquareEngine/src",
+    "../SquareEngine/vendor/include-glfw",
+    "../SquareEngine/vendor/include-glad",
+    "../SquareEngine/vendor/include"
    }
 
    links
    {
-    "vendor/glfw3.lib", "vendor/glfw3_mt.lib", "vendor/glfw3dll.lib"
+    "SquareEngine"
    }
 
    targetdir ("../Binaries/" .. OutputDir .. "/%{prj.name}")

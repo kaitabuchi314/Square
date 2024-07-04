@@ -1,7 +1,7 @@
-#include <glm/glm.hpp>
 #include <Square.h>
 
-float positions[] = {
+float positions[] =
+{
     -0.5f, -0.5f, -0.5f,
      0.5f, -0.5f, -0.5f,
      0.5f,  0.5f, -0.5f,
@@ -33,7 +33,8 @@ float positions[] = {
     -0.5f,  0.5f,  0.5f
 };
 
-float texCoords[] = {
+float texCoords[] =
+{
     0.0f, 0.0f,
     1.0f, 0.0f,
     1.0f, 1.0f,
@@ -87,7 +88,8 @@ int main()
     Square::Mesh box = Square::Mesh(positions, texCoords, indices, sizeof(positions), sizeof(texCoords), sizeof(indices));
 
     Square::Texture2D boxTexture = Square::loadTexture("../Assets/box.png");
-    Square::Texture2D concreteTexture = Square::loadTexture("../Assets/concrete.jpg");
+    Square::Texture2D logoTexture = Square::loadTexture("../Assets/Logo.png");
+    Square::Texture2D concreteTexture = Square::loadTexture("../Assets/grass.jpg");
 
     while (window)
     {
@@ -108,12 +110,11 @@ int main()
 
         renderer.BeginFrame(35, 164, 234);
 
-        renderer.RenderMesh(box, boxTexture, glm::vec3(0, 0.5f, 0), glm::vec3(window.GetTime()), glm::vec3(1));
-        renderer.RenderMesh(box, boxTexture, glm::vec3(2, 2, 0), glm::vec3(window.GetTime()/2), glm::vec3(1));
-        renderer.RenderMesh(box, boxTexture, glm::vec3(-3, 1, 1.5f), glm::vec3(window.GetTime()*1.5f), glm::vec3(1));
+        renderer.RenderMesh(box, logoTexture, glm::vec3(0, 0.5f, 0), glm::vec3(window.GetTime()), glm::vec3(1));
 
         renderer.RenderMesh(box, boxTexture, glm::vec3(3, 0, 1), glm::vec3(0), glm::vec3(1));
         renderer.RenderMesh(box, boxTexture, glm::vec3(-3.5f, 0, -2), glm::vec3(0), glm::vec3(1));
+        renderer.RenderMesh(box, boxTexture, glm::vec3(1, 0, 2.5f), glm::vec3(0, window.GetTime(), 0), glm::vec3(1));
 
         renderer.RenderMesh(box, concreteTexture, glm::vec3(0, -1, 0), glm::vec3(0), glm::vec3(10, 1, 10));
 
