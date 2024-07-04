@@ -1,0 +1,11 @@
+*.sln
+**.sln
+
+SquareEngine/.vs/
+~/SquareEngine/.vs/
+**.vcxproj
+*.vcxproj
+**.vcxproj.filters
+*.vcxproj.filters
+**.vcxproj.user
+*.vcxproj.user
