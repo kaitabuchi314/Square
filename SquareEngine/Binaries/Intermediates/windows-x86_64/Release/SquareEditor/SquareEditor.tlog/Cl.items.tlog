@@ -1,1 +1,9 @@
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEditor\src\EditorLayer.cpp;D:\dev\SquareEngine\SquareEngine\SquareEngine\Binaries\Intermediates\windows-x86_64\Release\SquareEditor\EditorLayer.obj
 D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEditor\src\main.cpp;D:\dev\SquareEngine\SquareEngine\SquareEngine\Binaries\Intermediates\windows-x86_64\Release\SquareEditor\main.obj
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEditor\vendor\ImGui\imgui.cpp;D:\dev\SquareEngine\SquareEngine\SquareEngine\Binaries\Intermediates\windows-x86_64\Release\SquareEditor\imgui.obj
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEditor\vendor\ImGui\imgui_demo.cpp;D:\dev\SquareEngine\SquareEngine\SquareEngine\Binaries\Intermediates\windows-x86_64\Release\SquareEditor\imgui_demo.obj
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEditor\vendor\ImGui\imgui_draw.cpp;D:\dev\SquareEngine\SquareEngine\SquareEngine\Binaries\Intermediates\windows-x86_64\Release\SquareEditor\imgui_draw.obj
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEditor\vendor\ImGui\imgui_impl_glfw.cpp;D:\dev\SquareEngine\SquareEngine\SquareEngine\Binaries\Intermediates\windows-x86_64\Release\SquareEditor\imgui_impl_glfw.obj
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEditor\vendor\ImGui\imgui_impl_opengl3.cpp;D:\dev\SquareEngine\SquareEngine\SquareEngine\Binaries\Intermediates\windows-x86_64\Release\SquareEditor\imgui_impl_opengl3.obj
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEditor\vendor\ImGui\imgui_tables.cpp;D:\dev\SquareEngine\SquareEngine\SquareEngine\Binaries\Intermediates\windows-x86_64\Release\SquareEditor\imgui_tables.obj
+D:\dev\SquareEngine\SquareEngine\SquareEngine\SquareEditor\vendor\ImGui\imgui_widgets.cpp;D:\dev\SquareEngine\SquareEngine\SquareEngine\Binaries\Intermediates\windows-x86_64\Release\SquareEditor\imgui_widgets.obj

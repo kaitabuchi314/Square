@@ -5,12 +5,12 @@ project "SquareEditor"
    targetdir "Binaries/%{cfg.buildcfg}"
    staticruntime "off"
 
-   files { "src/**.h", "src/**.cpp" }
+   files { "src/**.h", "src/**.cpp", "vendor/ImGui/**.h", "vendor/ImGui/**.cpp" }
 
    includedirs
    {
-	
 	"src",
+    "vendor/ImGui",
     "../SquareEngine/src",
     "../SquareEngine/vendor/include-glfw",
     "../SquareEngine/vendor/include-glad",
