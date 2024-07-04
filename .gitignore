@@ -15,9 +15,5 @@ SquareEngine/.vs/
 *.lib
 **.exe
 *.pdb
-SquareEngine/x64/
-~/SquareEngine/x64/
-SquareEngine/SquareEditor/x64/
-~/SquareEngine/x64/SquareEditor/x64/
-SquareEngine/SquareEngine/x64/
-~/SquareEngine/x64/SquareEngine/x64/
+SquareEngine/Binaries/
+~/SquareEngine/Binaries/
