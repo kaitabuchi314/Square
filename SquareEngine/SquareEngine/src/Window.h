@@ -40,4 +40,10 @@ namespace Square
 	glm::vec2 GetMousePosition();
 	bool IsMouseDown(int button);
 	bool IsMouseUp(int button);
+
+	inline float scroll = 0;
+	float GetMouseScroll();
+	void ReceivedScroll();
+
+	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 }

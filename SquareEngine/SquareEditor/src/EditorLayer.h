@@ -16,6 +16,7 @@ private:
     void DrawImGui();
     void SetImGuiColors();
     void SetTopbarColors();
+    void InputVector(const char* title, const char* id, glm::vec3* vector);
 private:
 	Square::Window window;
 	Square::Camera camera;
@@ -24,6 +25,10 @@ private:
 	Square::Texture2D boxTexture;
 	Square::Texture2D logoTexture;
 	Square::Texture2D grassTexture;
+private:
+    glm::vec3 boxPosition;
+    glm::vec3 boxRotation;
+    glm::vec3 boxScale;
 };
 
 inline float positions[] =

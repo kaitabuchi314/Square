@@ -1,14 +1,17 @@
 #include "EditorLayer.h"
 
 
-EditorLayer::EditorLayer()
-	: window(1296, 864, "Square Editor", true),
-		camera(glm::vec3(0, 0, -5), glm::vec3(0)),
-			renderer(window.width, window.height),
-				box(positions, texCoords, indices, sizeof(positions), sizeof(texCoords), sizeof(indices)),
-					boxTexture(Square::loadTexture("../Assets/box.png")),
-						logoTexture(Square::loadTexture("../Assets/Logo.png")),
-							grassTexture(Square::loadTexture("../Assets/grass.jpg"))
+EditorLayer::EditorLayer() :
+    window(1296, 864, "Square Editor", true),
+	camera(glm::vec3(0, 0, -5), glm::vec3(0)),
+	renderer(window.width, window.height),
+	box(positions, texCoords, indices, sizeof(positions), sizeof(texCoords), sizeof(indices)),
+	boxTexture(Square::loadTexture("../Assets/box.png")),
+	logoTexture(Square::loadTexture("../Assets/Logo.png")),
+	grassTexture(Square::loadTexture("../Assets/grass.jpg")),
+    boxPosition(),
+    boxRotation(),
+    boxScale(1)
 {
 	Square::SetMainCamera(&camera);
 
@@ -39,28 +42,31 @@ void EditorLayer::Run(int argc, char** argv)
 {
     while (window)
     {
-        if (Square::IsKeyDown(S_KEY_Q))
-            camera.position.z += 0.001f;
-        if (Square::IsKeyDown(S_KEY_E))
-            camera.position.z -= 0.001f;
-        if (Square::IsKeyDown(S_KEY_W))
-            camera.rotation.x += 0.0005f;
-        if (Square::IsKeyDown(S_KEY_S))
-            camera.rotation.x -= 0.0005f;
-        if (Square::IsKeyDown(S_KEY_A))
-            camera.rotation.y += 0.0005f;
-        if (Square::IsKeyDown(S_KEY_D))
-            camera.rotation.y -= 0.0005f;
+        if (Square::IsMouseDown(0))
+        {
+            if (Square::GetMousePosition().x > window.width / 2.5f && !ImGui::GetIO().WantCaptureMouse)
+                camera.rotation.y -= 0.00075f;
+            if (Square::GetMousePosition().x < window.width / 1.5f && !ImGui::GetIO().WantCaptureMouse)
+                camera.rotation.y += 0.00075f;
+            if (Square::GetMousePosition().y > window.height / 2.5f && !ImGui::GetIO().WantCaptureMouse)
+                camera.rotation.x -= 0.00075f;
+            if (Square::GetMousePosition().y < window.height / 1.5f && !ImGui::GetIO().WantCaptureMouse)
+                camera.rotation.x += 0.00075f;
+        }
+
+        if (Square::GetMouseScroll() != 0)
+        {
+            camera.position.z += Square::GetMouseScroll();
+            Square::ReceivedScroll();
+        }
 
         Square::UpdateCamera(&camera, true);
 
         renderer.BeginFrame(35, 164, 234);
 
-        renderer.RenderMesh(box, logoTexture, glm::vec3(0, 0.5f, 0), glm::vec3(window.GetTime()), glm::vec3(1));
+        renderer.RenderMesh(box, logoTexture, glm::vec3(0, 2, 0), glm::vec3(window.GetTime()), glm::vec3(1));
 
-        renderer.RenderMesh(box, boxTexture, glm::vec3(3, 0, 1), glm::vec3(0), glm::vec3(1));
-        renderer.RenderMesh(box, boxTexture, glm::vec3(-3.5f, 0, -2), glm::vec3(0), glm::vec3(1));
-        renderer.RenderMesh(box, boxTexture, glm::vec3(1, 0, 2.5f), glm::vec3(0, window.GetTime(), 0), glm::vec3(1));
+        renderer.RenderMesh(box, boxTexture, boxPosition, boxRotation, boxScale);
 
         renderer.RenderMesh(box, grassTexture, glm::vec3(0, -1, 0), glm::vec3(0), glm::vec3(10, 1, 10));
 
@@ -89,6 +95,10 @@ void EditorLayer::DrawImGui()
 {
     ImGui::Begin("Settings");
 
+    InputVector("Position: ", "###positioninput", &boxPosition);
+    InputVector("Rotation: ", "###rotationinput", &boxRotation);
+    InputVector("Scale: ", "###scaleinput", &boxScale);
+
     ImGui::End();
 
     SetTopbarColors();
@@ -111,30 +121,30 @@ void EditorLayer::SetImGuiColors()
     ImVec4* colors = ImGui::GetStyle().Colors;
     colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
     colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
-    colors[ImGuiCol_WindowBg] = ImVec4(0.10f, 0.10f, 0.10f, 1.00f);
+    colors[ImGuiCol_WindowBg] = ImVec4(0.10f, 0.10f, 0.10f, 0.10f);
     colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
     colors[ImGuiCol_PopupBg] = ImVec4(0.19f, 0.19f, 0.19f, 0.92f);
     colors[ImGuiCol_Border] = ImVec4(0.19f, 0.19f, 0.19f, 0.29f);
     colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.24f);
     colors[ImGuiCol_FrameBg] = ImVec4(0.05f, 0.05f, 0.05f, 0.54f);
-    colors[ImGuiCol_FrameBgHovered] = ImVec4(0.19f, 0.19f, 0.19f, 0.54f);
+    colors[ImGuiCol_FrameBgHovered] = ImVec4(0.19f, 0.19f, 0.19f, 0.08f);
     colors[ImGuiCol_FrameBgActive] = ImVec4(0.20f, 0.22f, 0.23f, 1.00f);
-    colors[ImGuiCol_TitleBg] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
-    colors[ImGuiCol_TitleBgActive] = ImVec4(0.06f, 0.06f, 0.06f, 1.00f);
+    colors[ImGuiCol_TitleBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+    colors[ImGuiCol_TitleBgActive] = ImVec4(0.06f, 0.06f, 0.06f, 0.00f);
     colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
     colors[ImGuiCol_MenuBarBg] = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
     colors[ImGuiCol_ScrollbarBg] = ImVec4(0.05f, 0.05f, 0.05f, 0.54f);
     colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.34f, 0.34f, 0.34f, 0.54f);
     colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.40f, 0.40f, 0.40f, 0.54f);
     colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.56f, 0.56f, 0.56f, 0.54f);
-    colors[ImGuiCol_CheckMark] = ImVec4(0.33f, 0.67f, 0.86f, 1.00f);
+    colors[ImGuiCol_CheckMark] = ImVec4(0.33f, 0.67f, 0.86f, 0.00f);
     colors[ImGuiCol_SliderGrab] = ImVec4(0.34f, 0.34f, 0.34f, 0.54f);
     colors[ImGuiCol_SliderGrabActive] = ImVec4(0.56f, 0.56f, 0.56f, 0.54f);
-    colors[ImGuiCol_Button] = ImVec4(0.05f, 0.05f, 0.05f, 0.54f);
+    colors[ImGuiCol_Button] = ImVec4(0.05f, 0.05f, 0.05f, 0.00f);
     colors[ImGuiCol_ButtonHovered] = ImVec4(0.19f, 0.19f, 0.19f, 0.54f);
     colors[ImGuiCol_ButtonActive] = ImVec4(0.20f, 0.22f, 0.23f, 1.00f);
-    colors[ImGuiCol_Header] = ImVec4(0.00f, 0.00f, 0.00f, 0.52f);
-    colors[ImGuiCol_HeaderHovered] = ImVec4(0.00f, 0.00f, 0.00f, 0.36f);
+    colors[ImGuiCol_Header] = ImVec4(0.00f, 0.00f, 0.00f, 0.0f);
+    colors[ImGuiCol_HeaderHovered] = ImVec4(0.00f, 0.00f, 0.00f, 0.1f);
     colors[ImGuiCol_HeaderActive] = ImVec4(0.20f, 0.22f, 0.23f, 0.33f);
     colors[ImGuiCol_Separator] = ImVec4(0.28f, 0.28f, 0.28f, 0.29f);
     colors[ImGuiCol_SeparatorHovered] = ImVec4(0.44f, 0.44f, 0.44f, 0.29f);
@@ -142,11 +152,11 @@ void EditorLayer::SetImGuiColors()
     colors[ImGuiCol_ResizeGrip] = ImVec4(0.28f, 0.28f, 0.28f, 0.29f);
     colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.44f, 0.44f, 0.44f, 0.29f);
     colors[ImGuiCol_ResizeGripActive] = ImVec4(0.40f, 0.44f, 0.47f, 1.00f);
-    colors[ImGuiCol_Tab] = ImVec4(0.00f, 0.00f, 0.00f, 0.52f);
+    colors[ImGuiCol_Tab] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
     colors[ImGuiCol_TabHovered] = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
-    colors[ImGuiCol_TabActive] = ImVec4(0.20f, 0.20f, 0.20f, 0.36f);
-    colors[ImGuiCol_TabUnfocused] = ImVec4(0.00f, 0.00f, 0.00f, 0.52f);
-    colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
+    colors[ImGuiCol_TabActive] = ImVec4(0.20f, 0.20f, 0.20f, 0.00f);
+    colors[ImGuiCol_TabUnfocused] = ImVec4(0.00f, 0.00f, 0.00f, 0.0f);
+    colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.14f, 0.14f, 0.14f, 0.00f);
     colors[ImGuiCol_DockingPreview] = ImVec4(0.33f, 0.67f, 0.86f, 1.00f);
     colors[ImGuiCol_DockingEmptyBg] = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
     colors[ImGuiCol_PlotLines] = ImVec4(1.00f, 0.00f, 0.00f, 1.00f);
@@ -182,7 +192,7 @@ void EditorLayer::SetImGuiColors()
     style.TabBorderSize = 1;
     style.WindowRounding = 7;
     style.ChildRounding = 4;
-    style.FrameRounding = 3;
+    style.FrameRounding = 1;
     style.PopupRounding = 4;
     style.ScrollbarRounding = 9;
     style.GrabRounding = 3;
@@ -195,12 +205,12 @@ void EditorLayer::SetTopbarColors()
     ImVec4* colors = ImGui::GetStyle().Colors;
     colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
     colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
-    colors[ImGuiCol_WindowBg] = ImVec4(0.10f, 0.10f, 0.10f, 1.00f);
+    colors[ImGuiCol_WindowBg] = ImVec4(0.10f, 0.10f, 0.10f, 0.00f);
     colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
     colors[ImGuiCol_PopupBg] = ImVec4(0.19f, 0.19f, 0.19f, 0.92f);
     colors[ImGuiCol_Border] = ImVec4(0.19f, 0.19f, 0.19f, 0.0f);
     colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.0f);
-    colors[ImGuiCol_FrameBg] = ImVec4(0.05f, 0.05f, 0.05f, 0.54f);
+    colors[ImGuiCol_FrameBg] = ImVec4(0.05f, 0.05f, 0.05f, 0.00f);
     colors[ImGuiCol_FrameBgHovered] = ImVec4(0.19f, 0.19f, 0.19f, 0.54f);
     colors[ImGuiCol_FrameBgActive] = ImVec4(0.20f, 0.22f, 0.23f, 1.00f);
     colors[ImGuiCol_TitleBg] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
@@ -223,9 +233,9 @@ void EditorLayer::SetTopbarColors()
     colors[ImGuiCol_Separator] = ImVec4(0.28f, 0.28f, 0.28f, 0.29f);
     colors[ImGuiCol_SeparatorHovered] = ImVec4(0.44f, 0.44f, 0.44f, 0.29f);
     colors[ImGuiCol_SeparatorActive] = ImVec4(0.40f, 0.44f, 0.47f, 1.00f);
-    colors[ImGuiCol_ResizeGrip] = ImVec4(0.28f, 0.28f, 0.28f, 0.29f);
-    colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.44f, 0.44f, 0.44f, 0.29f);
-    colors[ImGuiCol_ResizeGripActive] = ImVec4(0.40f, 0.44f, 0.47f, 1.00f);
+    colors[ImGuiCol_ResizeGrip] = ImVec4(0.28f, 0.28f, 0.28f, 0.00f);
+    colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.44f, 0.44f, 0.44f, 0.0f);
+    colors[ImGuiCol_ResizeGripActive] = ImVec4(0.40f, 0.44f, 0.47f, 0.00f);
     colors[ImGuiCol_Tab] = ImVec4(0.00f, 0.00f, 0.00f, 0.52f);
     colors[ImGuiCol_TabHovered] = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
     colors[ImGuiCol_TabActive] = ImVec4(0.20f, 0.20f, 0.20f, 0.36f);
@@ -273,4 +283,17 @@ void EditorLayer::SetTopbarColors()
     style.GrabRounding = 3;
     style.LogSliderDeadzone = 4;
     style.TabRounding = 4;
+}
+
+void EditorLayer::InputVector(const char* title, const char* id, glm::vec3* vector)
+{
+    float position[3] = { vector->x, vector->y, vector->z };
+
+    ImGui::Text(title);
+    ImGui::SameLine();
+    ImGui::InputFloat3(id, position);
+
+    vector->x = position[0];
+    vector->y = position[1];
+    vector->z = position[2];
 }

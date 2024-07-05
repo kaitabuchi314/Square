@@ -31,6 +31,8 @@ namespace Square
 
 		if (main)
 			activeWindow = this;
+
+		glfwSetScrollCallback(window, scroll_callback);
 	}
 
 	void Window::EndFrame()
@@ -100,6 +102,21 @@ namespace Square
 	bool IsMouseUp(int button)
 	{
 		return glfwGetMouseButton(activeWindow->GetWindow(), button) == GLFW_RELEASE;
+	}
+
+	float GetMouseScroll()
+	{
+		return scroll;
+	}
+
+	void ReceivedScroll()
+	{
+		scroll = 0;
+	}
+
+	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+	{
+		scroll += yoffset;
 	}
 }
 
