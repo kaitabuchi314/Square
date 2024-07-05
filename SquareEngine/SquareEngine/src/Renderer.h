@@ -15,7 +15,7 @@ namespace Square
 
 		void BeginFrame(float r, float g, float b);
 
-		void RenderMesh(Mesh mesh, Texture2D texture, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+		void RenderMesh(Mesh mesh, float shine, Texture2D texture, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 	
 		void SetLight(Light light);
 	private:

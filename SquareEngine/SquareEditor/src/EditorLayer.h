@@ -31,6 +31,8 @@ private:
     glm::vec3 boxPosition;
     glm::vec3 boxRotation;
     glm::vec3 boxScale;
+
+    float boxShine = 32;
 };
 
 inline float positions[] =
