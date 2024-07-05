@@ -5,7 +5,7 @@ EditorLayer::EditorLayer() :
     window(1296, 864, "Square Editor", true),
 	camera(glm::vec3(0, 0, -5), glm::vec3(0)),
 	renderer(window.width, window.height),
-	box(positions, texCoords, indices, sizeof(positions), sizeof(texCoords), sizeof(indices)),
+	box(positions, texCoords, normals, indices, sizeof(positions), sizeof(texCoords), sizeof(normals), sizeof(indices)),
 	boxTexture(Square::loadTexture("../Assets/box.png")),
 	logoTexture(Square::loadTexture("../Assets/Logo.png")),
 	grassTexture(Square::loadTexture("../Assets/grass.jpg")),
@@ -14,6 +14,8 @@ EditorLayer::EditorLayer() :
     boxScale(1)
 {
 	Square::SetMainCamera(&camera);
+
+    renderer.SetLight(glm::vec3(-500, 500, 500), glm::vec3(1.5f), 0.1f);
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();

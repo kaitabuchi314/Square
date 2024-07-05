@@ -43,4 +43,9 @@ namespace Square
 
 		UnbindTexture(texture);
 	}
+
+	void Renderer::SetLight(glm::vec3 lightPosition, glm::vec3 lightColor, float ambientLight)
+	{
+		program.SetLightVariables(lightPosition, lightColor, ambientLight);
+	}
 }

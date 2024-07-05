@@ -15,6 +15,7 @@ namespace Square
 		ShaderProgram(const char* vertexShaderSource, const char* fragmentShaderSource);
 
 		void Use(glm::mat4 model, glm::mat4 view, glm::mat4 projection);
+		void SetLightVariables(glm::vec3 lightPosition, glm::vec3 lightColor, float ambientLight);
 	public:
 		unsigned int shaderProgram;
 	};

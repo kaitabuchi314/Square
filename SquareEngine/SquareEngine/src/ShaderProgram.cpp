@@ -3,12 +3,11 @@
 
 namespace Square
 {
-	ShaderProgram::ShaderProgram(const char* vertexShaderSource, const char* fragmentShaderSource)
-	{
+    ShaderProgram::ShaderProgram(const char* vertexShaderSource, const char* fragmentShaderSource)
+    {
         unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
         glCompileShader(vertexShader);
-
 
         int success;
         char infoLog[512];
@@ -47,10 +46,10 @@ namespace Square
 
         glUseProgram(shaderProgram);
         glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture"), 0);
-	}
+    }
 
-	void ShaderProgram::Use(glm::mat4 model, glm::mat4 view, glm::mat4 projection)
-	{
+    void ShaderProgram::Use(glm::mat4 model, glm::mat4 view, glm::mat4 projection)
+    {
         glUseProgram(shaderProgram);
 
         unsigned int modelLoc = glGetUniformLocation(shaderProgram, "model");
@@ -60,5 +59,18 @@ namespace Square
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-	}
+    }
+
+    void ShaderProgram::SetLightVariables(glm::vec3 lightPosition, glm::vec3 lightColor, float ambientLight)
+    {
+        glUseProgram(shaderProgram);
+
+        unsigned int lightPosLoc = glGetUniformLocation(shaderProgram, "lightPosition");
+        unsigned int lightColorLoc = glGetUniformLocation(shaderProgram, "lightColor");
+        unsigned int ambientLightLoc = glGetUniformLocation(shaderProgram, "ambientLight");
+
+        glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightPosition));
+        glUniform3fv(lightColorLoc, 1, glm::value_ptr(lightColor));
+        glUniform1f(ambientLightLoc, ambientLight);
+    }
 }
