@@ -3,19 +3,19 @@
 
 EditorLayer::EditorLayer() :
     window(1296, 864, "Square Editor", true),
-	camera(glm::vec3(0, 0, -5), glm::vec3(0)),
-	renderer(window.width, window.height),
-	box(positions, texCoords, normals, indices, sizeof(positions), sizeof(texCoords), sizeof(normals), sizeof(indices)),
-	boxTexture(Square::loadTexture("../Assets/box.png")),
-	logoTexture(Square::loadTexture("../Assets/Logo.png")),
-	grassTexture(Square::loadTexture("../Assets/grass.jpg")),
+    camera(glm::vec3(0, 0, -5), glm::vec3(0)),
+    renderer(window.width, window.height),
+    box(positions, texCoords, normals, indices, sizeof(positions), sizeof(texCoords), sizeof(normals), sizeof(indices)),
+    boxTexture(Square::loadTexture("../Assets/box.png")),
+    grassTexture(Square::loadTexture("../Assets/grass.jpg")),
     boxPosition(),
     boxRotation(),
-    boxScale(1)
+    boxScale(1),
+    light({ glm::vec3(-500, 500, 500), glm::vec3(1.5f), 0.1f })
 {
 	Square::SetMainCamera(&camera);
 
-    renderer.SetLight(glm::vec3(-500, 500, 500), glm::vec3(1.5f), 0.1f);
+    renderer.SetLight(light);
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -44,29 +44,12 @@ void EditorLayer::Run(int argc, char** argv)
 {
     while (window)
     {
-        if (Square::IsMouseDown(0))
-        {
-            if (Square::GetMousePosition().x > window.width / 2.5f && !ImGui::GetIO().WantCaptureMouse)
-                camera.rotation.y -= 0.00075f;
-            if (Square::GetMousePosition().x < window.width / 1.5f && !ImGui::GetIO().WantCaptureMouse)
-                camera.rotation.y += 0.00075f;
-            if (Square::GetMousePosition().y > window.height / 2.5f && !ImGui::GetIO().WantCaptureMouse)
-                camera.rotation.x -= 0.00075f;
-            if (Square::GetMousePosition().y < window.height / 1.5f && !ImGui::GetIO().WantCaptureMouse)
-                camera.rotation.x += 0.00075f;
-        }
-
-        if (Square::GetMouseScroll() != 0)
-        {
-            camera.position.z += Square::GetMouseScroll();
-            Square::ReceivedScroll();
-        }
+        MoveCamera();
 
         Square::UpdateCamera(&camera, true);
 
+        renderer.SetLight(light);
         renderer.BeginFrame(35, 164, 234);
-
-        renderer.RenderMesh(box, logoTexture, glm::vec3(0, 2, 0), glm::vec3(window.GetTime()), glm::vec3(1));
 
         renderer.RenderMesh(box, boxTexture, boxPosition, boxRotation, boxScale);
 
@@ -75,6 +58,27 @@ void EditorLayer::Run(int argc, char** argv)
         ImGuiFrame();
 
         window.EndFrame();
+    }
+}
+
+void EditorLayer::MoveCamera()
+{
+    if (Square::IsMouseDown(0))
+    {
+        if (Square::GetMousePosition().x > window.width / 2.5f && !ImGui::GetIO().WantCaptureMouse)
+            camera.rotation.y -= 0.00075f;
+        if (Square::GetMousePosition().x < window.width / 1.5f && !ImGui::GetIO().WantCaptureMouse)
+            camera.rotation.y += 0.00075f;
+        if (Square::GetMousePosition().y > window.height / 2.5f && !ImGui::GetIO().WantCaptureMouse)
+            camera.rotation.x -= 0.00075f;
+        if (Square::GetMousePosition().y < window.height / 1.5f && !ImGui::GetIO().WantCaptureMouse)
+            camera.rotation.x += 0.00075f;
+    }
+
+    if (Square::GetMouseScroll() != 0)
+    {
+        camera.position.z += Square::GetMouseScroll();
+        Square::ReceivedScroll();
     }
 }
 
@@ -100,6 +104,17 @@ void EditorLayer::DrawImGui()
     InputVector("Position: ", "###positioninput", &boxPosition);
     InputVector("Rotation: ", "###rotationinput", &boxRotation);
     InputVector("Scale: ", "###scaleinput", &boxScale);
+
+    ImGui::End();
+
+    ImGui::Begin("Lighting");
+
+    InputVector("Position: ", "###lightpositioninput", &light.lightPosition);
+    InputVector("Color: ", "###lightcolorinput", &light.lightColor);
+    
+    ImGui::Text("Ambient: ");
+    ImGui::SameLine();
+    ImGui::SliderFloat("###inputambient", &light.ambientLight, 0, 1);
 
     ImGui::End();
 

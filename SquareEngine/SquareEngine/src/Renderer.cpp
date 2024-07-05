@@ -3,6 +3,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <Light.h>
 
 namespace Square
 {
@@ -44,8 +45,8 @@ namespace Square
 		UnbindTexture(texture);
 	}
 
-	void Renderer::SetLight(glm::vec3 lightPosition, glm::vec3 lightColor, float ambientLight)
+	void Renderer::SetLight(Light light)
 	{
-		program.SetLightVariables(lightPosition, lightColor, ambientLight);
+		program.SetLightVariables(light.lightPosition, light.lightColor, light.ambientLight);
 	}
 }

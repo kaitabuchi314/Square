@@ -5,6 +5,7 @@
 #include "Debug.h"
 #include "Window.h"
 
+#include "Light.h"
 #include "Camera.h"
 #include "Texture2D.h"
 #include "Mesh.h"

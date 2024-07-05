@@ -4,6 +4,7 @@
 #include <Mesh.h>
 #include <Texture2D.h>
 #include <Camera.h>
+#include <Light.h>
 
 namespace Square
 {
@@ -16,7 +17,7 @@ namespace Square
 
 		void RenderMesh(Mesh mesh, Texture2D texture, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 	
-		void SetLight(glm::vec3 lightPosition, glm::vec3 lightColor, float ambientLight);
+		void SetLight(Light light);
 	private:
 		ShaderProgram program;
 

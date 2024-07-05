@@ -12,6 +12,7 @@ public:
 	virtual ~EditorLayer() override;
 	virtual void Run(int argc, char** argv) override;
 private:
+    void MoveCamera();
     void ImGuiFrame();
     void DrawImGui();
     void SetImGuiColors();
@@ -23,8 +24,9 @@ private:
 	Square::Renderer renderer;
 	Square::Mesh box;
 	Square::Texture2D boxTexture;
-	Square::Texture2D logoTexture;
 	Square::Texture2D grassTexture;
+
+    Square::Light light;
 private:
     glm::vec3 boxPosition;
     glm::vec3 boxRotation;
