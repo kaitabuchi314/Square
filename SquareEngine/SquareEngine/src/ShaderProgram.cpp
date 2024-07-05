@@ -26,7 +26,7 @@ namespace Square
         if (!success)
         {
             glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-            Log(std::string("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n") + std::string(infoLog));
+            Square::Log(std::string("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n") + std::string(infoLog));
         }
 
         shaderProgram = glCreateProgram();
@@ -38,7 +38,7 @@ namespace Square
         if (!success)
         {
             glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-            Log(std::string("ERROR::SHADER::PROGRAM::LINKING_FAILED\n") + std::string(infoLog));
+            Square::Log(std::string("ERROR::SHADER::PROGRAM::LINKING_FAILED\n") + std::string(infoLog));
         }
 
         glDeleteShader(vertexShader);
@@ -72,5 +72,16 @@ namespace Square
         glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightPosition));
         glUniform3fv(lightColorLoc, 1, glm::value_ptr(lightColor));
         glUniform1f(ambientLightLoc, ambientLight);
+    }
+
+    void ShaderProgram::SetMaterialProperties(glm::vec3 viewPosition, float shininess)
+    {
+        glUseProgram(shaderProgram);
+
+        unsigned int viewPosLoc = glGetUniformLocation(shaderProgram, "viewPosition");
+        unsigned int shininessLoc = glGetUniformLocation(shaderProgram, "shininess");
+
+        glUniform3fv(viewPosLoc, 1, glm::value_ptr(viewPosition));
+        glUniform1f(shininessLoc, shininess);
     }
 }

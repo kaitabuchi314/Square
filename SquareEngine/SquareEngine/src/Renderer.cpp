@@ -22,7 +22,7 @@ namespace Square
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void Renderer::RenderMesh(Mesh mesh, Texture2D texture, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+	void Renderer::RenderMesh(Mesh mesh, float shine, Texture2D texture, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 	{
 		glm::mat4 model = glm::translate(glm::mat4(1.0f), position);
 		model = glm::rotate(model, rotation.x, glm::vec3(1, 0, 0));
@@ -30,7 +30,7 @@ namespace Square
 		model = glm::rotate(model, rotation.z, glm::vec3(0, 0, 1));
 		model = glm::scale(model, scale);
 
-		glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
+		program.SetMaterialProperties(GetMainCamera()->position, shine);
 
 		program.Use(model, GetMainCamera()->view, projection);
 

@@ -9,14 +9,16 @@
 
 namespace Square
 {
-	class ShaderProgram
-	{
-	public:
-		ShaderProgram(const char* vertexShaderSource, const char* fragmentShaderSource);
+    class ShaderProgram
+    {
+    public:
+        ShaderProgram(const char* vertexShaderSource, const char* fragmentShaderSource);
 
-		void Use(glm::mat4 model, glm::mat4 view, glm::mat4 projection);
-		void SetLightVariables(glm::vec3 lightPosition, glm::vec3 lightColor, float ambientLight);
-	public:
-		unsigned int shaderProgram;
-	};
+        void Use(glm::mat4 model, glm::mat4 view, glm::mat4 projection);
+        void SetLightVariables(glm::vec3 lightPosition, glm::vec3 lightColor, float ambientLight);
+        void SetMaterialProperties(glm::vec3 viewPosition, float shininess);
+
+    private:
+        unsigned int shaderProgram;
+    };
 }

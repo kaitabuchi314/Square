@@ -12,24 +12,19 @@ layout (location = 2) in vec2 aTexCoord;
 layout (location = 3) in vec3 normal;
 
 out vec2 TexCoord;
-out vec3 surfaceNormal;
-out vec3 toLightVector;
-out vec3 fragPos;
+out vec3 FragPos;
+out vec3 Normal;
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
-uniform vec3 lightPosition;
 
 void main()
 {
-    vec4 worldPosition = model * vec4(aPos, 1.0);
-    gl_Position = projection * view * worldPosition;
+    gl_Position = projection * view * model * vec4(aPos, 1.0);
+    FragPos = vec3(model * vec4(aPos, 1.0));
+    Normal = mat3(transpose(inverse(model))) * normal;
     TexCoord = aTexCoord;
-    
-    surfaceNormal = mat3(transpose(inverse(model))) * normal;
-    fragPos = vec3(worldPosition);
-    toLightVector = lightPosition - fragPos;
 }
 )";
 
@@ -39,23 +34,35 @@ R"(
 out vec4 FragColor;
 
 in vec2 TexCoord;
-in vec3 surfaceNormal;
-in vec3 toLightVector;
+in vec3 FragPos;
+in vec3 Normal;
 
 uniform sampler2D ourTexture;
+uniform vec3 lightPosition;
 uniform vec3 lightColor;
 uniform float ambientLight;
+uniform vec3 viewPosition;
+uniform float shininess;
 
 void main()
 {
-    vec3 unitNormal = normalize(surfaceNormal);
-    vec3 unitLightVector = normalize(toLightVector);
-    
-    float nDotL = max(dot(unitNormal, unitLightVector), 0.0);
-    float brightness = max(nDotL, ambientLight);
-    vec3 diffuse = brightness * lightColor;
-    vec4 texColor = texture(ourTexture, TexCoord);
-    FragColor = vec4(diffuse, 1.0) * texColor;
+    // Ambient
+    vec3 ambient = ambientLight * lightColor;
+
+    // Diffuse
+    vec3 norm = normalize(Normal);
+    vec3 lightDir = normalize(lightPosition - FragPos);
+    float diff = max(dot(norm, lightDir), 0.0);
+    vec3 diffuse = diff * lightColor;
+
+    // Specular
+    vec3 viewDir = normalize(viewPosition - FragPos);
+    vec3 reflectDir = reflect(-lightDir, norm);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+    vec3 specular = spec * lightColor;
+
+    vec3 result = (ambient + diffuse + specular) * vec3(texture(ourTexture, TexCoord));
+    FragColor = vec4(result, 1.0);
 }
 )";
 

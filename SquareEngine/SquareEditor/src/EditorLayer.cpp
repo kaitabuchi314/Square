@@ -11,7 +11,7 @@ EditorLayer::EditorLayer() :
     boxPosition(),
     boxRotation(),
     boxScale(1),
-    light({ glm::vec3(-500, 500, 500), glm::vec3(1.5f), 0.1f })
+    light({ glm::vec3(-500, 500, 500), glm::vec3(1.5f), 0.15f })
 {
 	Square::SetMainCamera(&camera);
 
@@ -51,9 +51,9 @@ void EditorLayer::Run(int argc, char** argv)
         renderer.SetLight(light);
         renderer.BeginFrame(35, 164, 234);
 
-        renderer.RenderMesh(box, boxTexture, boxPosition, boxRotation, boxScale);
+        renderer.RenderMesh(box, boxShine, boxTexture, boxPosition, boxRotation, boxScale);
 
-        renderer.RenderMesh(box, grassTexture, glm::vec3(0, -1, 0), glm::vec3(0), glm::vec3(10, 1, 10));
+        renderer.RenderMesh(box, 32, grassTexture, glm::vec3(0, -1, 0), glm::vec3(0), glm::vec3(10, 1, 10));
 
         ImGuiFrame();
 
@@ -104,6 +104,12 @@ void EditorLayer::DrawImGui()
     InputVector("Position: ", "###positioninput", &boxPosition);
     InputVector("Rotation: ", "###rotationinput", &boxRotation);
     InputVector("Scale: ", "###scaleinput", &boxScale);
+
+    ImGui::Separator();
+
+    ImGui::Text("Shine: ");
+    ImGui::SameLine();
+    ImGui::SliderFloat("###inputshine", &boxShine, 0.1f, 10);
 
     ImGui::End();
 
