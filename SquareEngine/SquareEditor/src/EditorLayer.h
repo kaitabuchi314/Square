@@ -96,7 +96,44 @@ inline float texCoords[] =
     1.0f, 0.0f,
     0.0f, 0.0f
 };
+inline float normals[] =
+{
+    // Front face (-Z direction)
+    0.0f,  0.0f, -1.0f,
+    0.0f,  0.0f, -1.0f,
+    0.0f,  0.0f, -1.0f,
+    0.0f,  0.0f, -1.0f,
 
+    // Back face (+Z direction)
+    0.0f,  0.0f,  1.0f,
+    0.0f,  0.0f,  1.0f,
+    0.0f,  0.0f,  1.0f,
+    0.0f,  0.0f,  1.0f,
+
+    // Left face (-X direction)
+    -1.0f,  0.0f,  0.0f,
+    -1.0f,  0.0f,  0.0f,
+    -1.0f,  0.0f,  0.0f,
+    -1.0f,  0.0f,  0.0f,
+
+    // Right face (+X direction)
+    1.0f,  0.0f,  0.0f,
+    1.0f,  0.0f,  0.0f,
+    1.0f,  0.0f,  0.0f,
+    1.0f,  0.0f,  0.0f,
+
+    // Bottom face (-Y direction)
+    0.0f, -1.0f,  0.0f,
+    0.0f, -1.0f,  0.0f,
+    0.0f, -1.0f,  0.0f,
+    0.0f, -1.0f,  0.0f,
+
+    // Top face (+Y direction)
+    0.0f,  1.0f,  0.0f,
+    0.0f,  1.0f,  0.0f,
+    0.0f,  1.0f,  0.0f,
+    0.0f,  1.0f,  0.0f
+};
 inline unsigned int indices[] =
 {
     0, 1, 2, 2, 3, 0,
