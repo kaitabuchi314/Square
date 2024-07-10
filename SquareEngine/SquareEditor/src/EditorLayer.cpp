@@ -6,11 +6,10 @@ EditorLayer::EditorLayer() :
     camera(glm::vec3(0, 0, -5), glm::vec3(0)),
     renderer(window.width, window.height),
     box(positions, texCoords, normals, indices, sizeof(positions), sizeof(texCoords), sizeof(normals), sizeof(indices)),
-    boxTexture(Square::loadTexture("../Assets/box.png")),
-    grassTexture(Square::loadTexture("../Assets/grass.jpg")),
-    boxPosition(),
-    boxRotation(),
-    boxScale(1),
+    texture(Square::loadTexture("../Assets/box.png")),
+    position(),
+    rotation(),
+    scale(1),
     light({ glm::vec3(-500, 500, 500), glm::vec3(1.5f), 0.15f })
 {
 	Square::SetMainCamera(&camera);
@@ -22,7 +21,7 @@ EditorLayer::EditorLayer() :
     ImGuiIO& io = ImGui::GetIO(); (void)io;
 
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-
+    
     ImGui_ImplGlfw_InitForOpenGL(window.GetWindow(), true);
 
     ImGui_ImplOpenGL3_Init("#version 130");
@@ -42,6 +41,7 @@ EditorLayer::~EditorLayer()
 
 void EditorLayer::Run(int argc, char** argv)
 {
+    
     while (window)
     {
         MoveCamera();
@@ -51,10 +51,8 @@ void EditorLayer::Run(int argc, char** argv)
         renderer.SetLight(light);
         renderer.BeginFrame(35, 164, 234);
 
-        renderer.RenderMesh(box, boxShine, boxTexture, boxPosition, boxRotation, boxScale);
-
-        renderer.RenderMesh(box, 32, grassTexture, glm::vec3(0, -1, 0), glm::vec3(0), glm::vec3(10, 1, 10));
-
+        renderer.RenderMesh(box, shine, texture, position, rotation, scale);
+        
         ImGuiFrame();
 
         window.EndFrame();
@@ -77,7 +75,10 @@ void EditorLayer::MoveCamera()
 
     if (Square::GetMouseScroll() != 0)
     {
-        camera.position.z += Square::GetMouseScroll();
+        if (!ImGui::GetIO().WantCaptureMouse)
+        {
+            camera.position.z += Square::GetMouseScroll();
+        }
         Square::ReceivedScroll();
     }
 }
@@ -101,23 +102,23 @@ void EditorLayer::DrawImGui()
 {
     ImGui::Begin("Settings");
 
-    InputVector("Position: ", "###positioninput", &boxPosition);
-    InputVector("Rotation: ", "###rotationinput", &boxRotation);
-    InputVector("Scale: ", "###scaleinput", &boxScale);
+    InputVector("Position: ", "###positioninput", &position);
+    InputVector("Rotation: ", "###rotationinput", &rotation);
+    InputVector("Scale: ", "###scaleinput", &scale);
 
     ImGui::Separator();
 
     ImGui::Text("Shine: ");
     ImGui::SameLine();
-    ImGui::SliderFloat("###inputshine", &boxShine, 0.1f, 10);
+    ImGui::SliderFloat("###inputshine", &shine, 0.1f, 10);
 
     ImGui::End();
 
     ImGui::Begin("Lighting");
 
     InputVector("Position: ", "###lightpositioninput", &light.lightPosition);
-    InputVector("Color: ", "###lightcolorinput", &light.lightColor);
-    
+    InputVectorSlider("Color: ", "###lightcolorinput", &light.lightColor, 0, 100);
+
     ImGui::Text("Ambient: ");
     ImGui::SameLine();
     ImGui::SliderFloat("###inputambient", &light.ambientLight, 0, 1);
@@ -126,11 +127,11 @@ void EditorLayer::DrawImGui()
 
     SetTopbarColors();
 
-    ImGui::Begin("Topbar");
+    ImGui::Begin("Topbar", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoDecoration);
 
     if (ImGui::SmallButton("Reset Camera"))
     {
-        camera.position = glm::vec3(0, 0, -3);
+        camera.position = glm::vec3(0, 0, -5);
         camera.rotation = glm::vec3(0, 0, 0);
     }
 
@@ -315,6 +316,19 @@ void EditorLayer::InputVector(const char* title, const char* id, glm::vec3* vect
     ImGui::Text(title);
     ImGui::SameLine();
     ImGui::InputFloat3(id, position);
+
+    vector->x = position[0];
+    vector->y = position[1];
+    vector->z = position[2];
+}
+
+void EditorLayer::InputVectorSlider(const char* title, const char* id, glm::vec3* vector, float min, float max)
+{
+    float position[3] = { vector->x, vector->y, vector->z };
+
+    ImGui::Text(title);
+    ImGui::SameLine();
+    ImGui::SliderFloat3(id, position, min, max);
 
     vector->x = position[0];
     vector->y = position[1];

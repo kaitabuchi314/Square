@@ -1,10 +1,12 @@
 #include "Mesh.h"
+#include <iostream>
 
 namespace Square
 {
-    Mesh::Mesh(float positions[], float textureCoords[], float normals[], unsigned int indices[], size_t positionsLength, size_t textureCoordsLength, size_t normalsLength, size_t indicesLength)
+    Mesh::Mesh(float positions[], float textureCoords[], float normals[], int indices[], size_t positionsLength, size_t textureCoordsLength, size_t normalsLength, size_t indicesLength)
     {
-        vertexCount = positionsLength / 3;
+        //vertexCount = positionsLength / 3;
+        vertexCount = positionsLength;
         glGenVertexArrays(1, &VAO);
         glGenBuffers(3, VBOs);
         glGenBuffers(1, &EBO);
@@ -13,6 +15,7 @@ namespace Square
 
         glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
         glBufferData(GL_ARRAY_BUFFER, positionsLength, positions, GL_STATIC_DRAW);
+        //glBufferData(GL_ARRAY_BUFFER, positionsLength, positions, GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
 
@@ -27,6 +30,7 @@ namespace Square
         glEnableVertexAttribArray(3);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        //glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesLength, indices, GL_STATIC_DRAW);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesLength, indices, GL_STATIC_DRAW);
     }
 

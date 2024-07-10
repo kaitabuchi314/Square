@@ -1,6 +1,5 @@
 #pragma once
 #include <Square.h>
-
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
@@ -18,21 +17,23 @@ private:
     void SetImGuiColors();
     void SetTopbarColors();
     void InputVector(const char* title, const char* id, glm::vec3* vector);
+    void InputVectorSlider(const char* title, const char* id, glm::vec3* vector, float min, float max);
 private:
 	Square::Window window;
 	Square::Camera camera;
 	Square::Renderer renderer;
 	Square::Mesh box;
-	Square::Texture2D boxTexture;
-	Square::Texture2D grassTexture;
+	Square::Texture2D texture;
 
     Square::Light light;
 private:
-    glm::vec3 boxPosition;
-    glm::vec3 boxRotation;
-    glm::vec3 boxScale;
+    glm::vec3 position;
+    glm::vec3 rotation;
+    glm::vec3 scale;
 
-    float boxShine = 32;
+    float shine = 10;
+
+    float lightIntensity = 1.5f;
 };
 
 inline float positions[] =
@@ -138,7 +139,7 @@ inline float normals[] =
     0.0f,  1.0f,  0.0f,
     0.0f,  1.0f,  0.0f
 };
-inline unsigned int indices[] =
+inline int indices[] =
 {
     0, 1, 2, 2, 3, 0,
     4, 5, 6, 6, 7, 4,

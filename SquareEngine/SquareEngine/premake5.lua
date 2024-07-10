@@ -5,7 +5,7 @@ project "SquareEngine"
    targetdir "Binaries/%{cfg.buildcfg}"
    staticruntime "off"
 
-   files { "src/**.h", "src/**.cpp", "vendor/glad/**.c" }
+   files { "src/**.h", "src/**.cpp", "vendor/glad/**.c", "vendor/TinyXML/tinyxml2.cpp" }
 
    includedirs
    {
