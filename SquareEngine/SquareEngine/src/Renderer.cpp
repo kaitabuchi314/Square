@@ -10,9 +10,7 @@ namespace Square
 	Renderer::Renderer(int width, int height) :
 		program(TextureShader::vertexShaderSource, TextureShader::fragmentShaderSource)
 	{
-		glViewport(0, 0, width, height);
-		projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
-
+		Resize(width, height);
 		glEnable(GL_DEPTH_TEST);
 	}
 
@@ -20,6 +18,11 @@ namespace Square
 	{
 		glClearColor(r / 255, g / 255, b / 255, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
+	void Renderer::Resize(int width, int height)
+	{
+		projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
 	}
 
 	void Renderer::RenderMesh(Mesh mesh, float shine, Texture2D texture, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)

@@ -10,7 +10,7 @@ EditorLayer::EditorLayer() :
     position(),
     rotation(),
     scale(1),
-    light({ glm::vec3(-500, 500, 500), glm::vec3(1.5f), 0.15f })
+    light( { glm::vec3(-500, 500, 500), glm::vec3(1.5f), 0.15f } )
 {
 	Square::SetMainCamera(&camera);
 
@@ -41,7 +41,6 @@ EditorLayer::~EditorLayer()
 
 void EditorLayer::Run(int argc, char** argv)
 {
-    
     while (window)
     {
         MoveCamera();
@@ -55,6 +54,7 @@ void EditorLayer::Run(int argc, char** argv)
         
         ImGuiFrame();
 
+        renderer.Resize(window.width, window.height);
         window.EndFrame();
     }
 }
