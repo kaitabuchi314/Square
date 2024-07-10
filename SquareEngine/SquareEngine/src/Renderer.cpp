@@ -39,7 +39,7 @@ namespace Square
 		mesh.Bind();
 		
 		glDrawElements(GL_TRIANGLES, mesh.vertexCount, GL_UNSIGNED_INT, 0);
-
+		
 		mesh.Unbind();
 
 		UnbindTexture(texture);
