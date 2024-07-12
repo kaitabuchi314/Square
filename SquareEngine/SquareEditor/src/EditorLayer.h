@@ -15,7 +15,6 @@ private:
     void ImGuiFrame();
     void DrawImGui();
     void SetImGuiColors();
-    void SetTopbarColors();
     void InputVector(const char* title, const char* id, glm::vec3* vector);
     void InputVectorSlider(const char* title, const char* id, glm::vec3* vector, float min, float max);
 private:
@@ -34,6 +33,17 @@ private:
     float shine = 10;
 
     float lightIntensity = 1.5f;
+
+    float skyColorR = 35 / 255;
+    float skyColorG = 164 / 255;
+    float skyColorB = 234 / 255;
+private:
+    float fontSize = 1;
+
+    ImFont* regular;
+    ImFont* bold;
+private:
+    bool preferencesWindowOpen = false;
 };
 
 inline float positions[] =
