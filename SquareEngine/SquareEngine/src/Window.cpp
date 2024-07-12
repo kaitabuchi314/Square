@@ -52,6 +52,11 @@ namespace Square
 		return glfwWindowShouldClose(window);
 	}
 
+	void Window::Close()
+	{
+		glfwSetWindowShouldClose(window, GLFW_TRUE);
+	}
+
 	double Window::GetTime()
 	{
 		return glfwGetTime();
