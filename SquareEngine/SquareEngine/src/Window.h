@@ -15,6 +15,8 @@ namespace Square
 		
 		bool ShouldClose();
 
+		void Close();
+
 		double GetTime();
 
 		GLFWwindow* GetWindow();
