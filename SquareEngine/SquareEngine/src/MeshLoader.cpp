@@ -41,7 +41,6 @@ namespace Square
     void loadSingleMesh(aiMesh* mesh, std::vector<float>& vertices, std::vector<int>& indices, std::vector<float>& textureCoords, std::vector<float>& normals)
     {
         // Debug information
-        std::cout << "Loading mesh with " << mesh->mNumVertices << " vertices and " << mesh->mNumFaces << " faces.\n";
 
         for (unsigned int i = 0; i < mesh->mNumVertices; i++)
         {
@@ -79,7 +78,6 @@ namespace Square
         }
 
         // Debug information
-        std::cout << "Finished loading mesh. Current total vertices: " << vertices.size() / 3 << ", indices: " << indices.size() << ".\n";
     }
 
     Mesh* loadMesh(const char* path)

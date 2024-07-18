@@ -4,7 +4,7 @@ EditorLayer::EditorLayer() :
     window(1296, 864, "Square Editor", true),
     camera(glm::vec3(0, 0, -5), glm::vec3(0)),
     renderer(window.width, window.height),
-    box(Square::loadMesh("../Assets/monkey.fbx")),
+    mesh(Square::loadMesh("../Assets/monkey.fbx")),
     texture(Square::loadTexture("../Assets/Gold.png")),
     position(),
     rotation(),
@@ -39,7 +39,7 @@ EditorLayer::~EditorLayer()
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
-    delete box;
+    delete mesh;
 
     window.Flush();
 }
@@ -61,7 +61,7 @@ void EditorLayer::Run(int argc, char** argv)
 
         renderer.BeginFrame(skyColorR*255, skyColorG*255, skyColorB*255);
 
-        renderer.RenderMesh(box, shine, texture, position, rotation, scale);
+        renderer.RenderMesh(mesh, shine, texture, position, rotation, scale);
         
         ImGuiFrame();
 
@@ -122,6 +122,7 @@ void EditorLayer::ImGuiFrame()
 
 void EditorLayer::DrawImGui()
 {
+    static bool preferencesWindowOpen = false;
     ImGui::Begin("Settings");
 
     InputVector("Position: ", "###positioninput", &position);
@@ -129,6 +130,24 @@ void EditorLayer::DrawImGui()
     InputVector("Scale: ", "###scaleinput", &scale);
 
     ImGui::Separator();
+
+    if (ImGui::Button("Load Mesh"))
+    {
+        std::string fn = FileOpen(2);
+        if (fn != "")
+        {
+            mesh = Square::loadMesh(fn.c_str());
+        }
+    }
+
+    if (ImGui::Button("Load Texture"))
+    {
+        std::string fn = FileOpen(1);
+        if (fn != "")
+        {
+            texture = Square::loadTexture(fn.c_str());
+        }
+    }
 
     ImGui::Text("Shine: ");
     ImGui::SameLine();
@@ -169,10 +188,11 @@ void EditorLayer::DrawImGui()
     {
         ImGui::Text("Font Size: ");
         ImGui::SameLine();
-        ImGui::InputFloat("###fontsize", &fontSize, 0.01f);
+        ImGui::SliderFloat("###fontsize", &fontSize, 1, 5);
 
         ImGui::End();
     }
+
 
     ImGui::Begin("Performance");
 
@@ -324,4 +344,55 @@ void EditorLayer::InputVectorSlider(const char* title, const char* id, glm::vec3
     vector->x = position[0];
     vector->y = position[1];
     vector->z = position[2];
+}
+std::string EditorLayer::FileOpen(int idx)
+{
+#ifdef WINDOWS
+    // Save the current working directory
+    std::filesystem::path currentPath = std::filesystem::current_path();
+
+    // Windows-specific file open dialog using Windows API (Unicode)
+    OPENFILENAMEW ofn;
+    wchar_t szFile[260] = { 0 };
+    ZeroMemory(&ofn, sizeof(ofn));
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = NULL;
+    ofn.lpstrFile = szFile;
+    ofn.nMaxFile = sizeof(szFile) / sizeof(szFile[0]);
+    wchar_t filter[] = L"Image Files\0*.png;*.jpg\0Mesh Files\0*.obj;*.fbx;*.glb\0All Files\0*.*\0";
+    ofn.lpstrFilter = filter;    ofn.nFilterIndex = idx;
+    ofn.lpstrFileTitle = NULL;
+    ofn.nMaxFileTitle = 0;
+    ofn.lpstrInitialDir = NULL;
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+    std::string result;
+
+    if (GetOpenFileNameW(&ofn) == TRUE) {
+        // Convert wide string to std::string
+        char filePath[260];
+        wcstombs(filePath, szFile, 260);
+
+        // Find the current working directory again (in case it changed)
+        std::string basePath = currentPath.string();
+
+        // Convert to relative path
+        result = GetRelativePath(std::string(filePath), basePath);
+    }
+
+    // Restore the original working directory
+    std::filesystem::current_path(currentPath);
+
+    return result;
+#else
+    // Not implemented for other platforms
+    throw std::runtime_error("FileOpen not implemented for this platform.");
+#endif
+}
+
+std::string EditorLayer::GetRelativePath(const std::string& absolutePath, const std::string& basePath) {
+    std::filesystem::path absPath(absolutePath);
+    std::filesystem::path base(basePath);
+    std::filesystem::path relativePath = std::filesystem::relative(absPath, base);
+    return relativePath.string();
 }
