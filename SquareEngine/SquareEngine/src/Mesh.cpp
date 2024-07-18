@@ -1,5 +1,6 @@
 #include "Mesh.h"
 #include <iostream>
+#include <MeshLoader.h>
 // glad is included in Mesh.h
 namespace Square
 {

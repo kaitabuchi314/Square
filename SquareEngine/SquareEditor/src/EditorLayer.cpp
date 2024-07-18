@@ -5,14 +5,17 @@ EditorLayer::EditorLayer() :
     camera(glm::vec3(0, 0, -5), glm::vec3(0)),
     renderer(window.width, window.height),
     mesh(Square::loadMesh("../Assets/monkey.fbx")),
-    texture(Square::loadTexture("../Assets/Gold.png")),
     position(),
     rotation(),
     scale(1),
     light({ glm::vec3(-500, 500, 500), glm::vec3(1.5f), 0.15f }),
     renderTimer(&window),
-    computeTimer(&window)
+    computeTimer(&window),
+    meshIcon(Square::loadTexture("Resources/meshicon.png"))
 {
+    mesh->mat.shine = 10;
+    mesh->mat.texture = Square::loadTexture("../Assets/Gold.png");
+
 	Square::SetMainCamera(&camera);
 
     renderer.SetLight(light);
@@ -25,6 +28,7 @@ EditorLayer::EditorLayer() :
 
     regular = io.Fonts->AddFontFromFileTTF("fonts/Roboto-Regular.ttf", 15);
     bold = io.Fonts->AddFontFromFileTTF("fonts/Roboto-Bold.ttf", 15);
+    boldXL = io.Fonts->AddFontFromFileTTF("fonts/Roboto-Bold.ttf", 20);
 
     ImGui_ImplGlfw_InitForOpenGL(window.GetWindow(), true);
 
@@ -61,7 +65,7 @@ void EditorLayer::Run(int argc, char** argv)
 
         renderer.BeginFrame(skyColorR*255, skyColorG*255, skyColorB*255);
 
-        renderer.RenderMesh(mesh, shine, texture, position, rotation, scale);
+        renderer.RenderMesh(mesh, position, rotation, scale);
         
         ImGuiFrame();
 
@@ -131,27 +135,45 @@ void EditorLayer::DrawImGui()
 
     ImGui::Separator();
 
-    if (ImGui::Button("Load Mesh"))
+    if (ImGui::ImageButton((void*)meshIcon, ImVec2(30, 30)))
     {
         std::string fn = FileOpen(2);
         if (fn != "")
         {
+            Square::Material mp = mesh->mat;
             mesh = Square::loadMesh(fn.c_str());
+            mesh->mat = mp;
         }
     }
 
-    if (ImGui::Button("Load Texture"))
+    if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+    {
+        ImGui::SetTooltip("Load Mesh");
+    }
+
+    ImGui::End();
+
+    ImGui::Begin("Material Editor");
+    if (ImGui::ImageButton((void*)mesh->mat.texture, ImVec2(30, 30)))
     {
         std::string fn = FileOpen(1);
         if (fn != "")
         {
-            texture = Square::loadTexture(fn.c_str());
+            mesh->mat.texture = Square::loadTexture(fn.c_str());
         }
     }
 
-    ImGui::Text("Shine: ");
-    ImGui::SameLine();
-    ImGui::SliderFloat("###inputshine", &shine, 0.1f, 128);
+    if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+    {
+        ImGui::SetTooltip("Material Base Color");
+    }
+
+    ImGui::SliderFloat("###inputshine", &mesh->mat.shine, 0.1f, 1024);
+
+    if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+    {
+        ImGui::SetTooltip("Material Specular");
+    }
 
     ImGui::End();
 
@@ -368,7 +390,8 @@ std::string EditorLayer::FileOpen(int idx)
 
     std::string result;
 
-    if (GetOpenFileNameW(&ofn) == TRUE) {
+    if (GetOpenFileNameW(&ofn) == TRUE)
+    {
         // Convert wide string to std::string
         char filePath[260];
         wcstombs(filePath, szFile, 260);
@@ -390,7 +413,8 @@ std::string EditorLayer::FileOpen(int idx)
 #endif
 }
 
-std::string EditorLayer::GetRelativePath(const std::string& absolutePath, const std::string& basePath) {
+std::string EditorLayer::GetRelativePath(const std::string& absolutePath, const std::string& basePath)
+{
     std::filesystem::path absPath(absolutePath);
     std::filesystem::path base(basePath);
     std::filesystem::path relativePath = std::filesystem::relative(absPath, base);

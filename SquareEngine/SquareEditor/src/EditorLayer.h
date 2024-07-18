@@ -37,20 +37,17 @@ private:
 	Square::Camera camera;
 	Square::Renderer renderer;
 	Square::Mesh* mesh;
-	Square::Texture2D texture;
 
     Square::Light light;
 
     Square::Timer renderTimer;
     Square::Timer computeTimer;
+
+    Square::Texture2D meshIcon;
 private:
     glm::vec3 position;
     glm::vec3 rotation;
     glm::vec3 scale;
-
-    float shine = 10;
-
-    float lightIntensity = 1.5f;
 
     float skyColorR = 35 / 255;
     float skyColorG = 164 / 255;
@@ -60,6 +57,7 @@ private:
 
     ImFont* regular;
     ImFont* bold;
+    ImFont* boldXL;
 private:
     double renderTimerTime = 0;
     double computeTimerTime = 0;

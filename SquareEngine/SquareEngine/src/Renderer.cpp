@@ -25,7 +25,7 @@ namespace Square
 		projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
 	}
 
-	void Renderer::RenderMesh(Mesh* mesh, float shine, Texture2D texture, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+	void Renderer::RenderMesh(Mesh* mesh, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 	{
 		glm::mat4 model = glm::translate(glm::mat4(1.0f), position);
 		model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1, 0, 0));
@@ -33,11 +33,11 @@ namespace Square
 		model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0, 0, 1));
 		model = glm::scale(model, scale);
 
-		program.SetMaterialProperties(GetMainCamera()->position, shine);
+		program.SetMaterialProperties(GetMainCamera()->position, mesh->mat.shine);
 
 		program.Use(model, GetMainCamera()->view, projection);
 
-		BindTexture(texture, 0);
+		BindTexture(mesh->mat.texture, 0);
 
 		mesh->Bind();
 		
@@ -45,7 +45,7 @@ namespace Square
 		
 		mesh->Unbind();
 
-		UnbindTexture(texture);
+		UnbindTexture(mesh->mat.texture);
 	}
 
 	void Renderer::SetLight(Light light)
