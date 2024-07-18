@@ -4,6 +4,18 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include <filesystem>
+
+
+#ifdef WINDOWS
+#include <windows.h>
+#include <commdlg.h>
+#include <Shlwapi.h>
+
+#pragma comment(lib, "Shlwapi.lib")
+
+#endif
+
 class EditorLayer : public Square::GameLayer
 {
 public:
@@ -17,11 +29,14 @@ private:
     void SetImGuiColors();
     void InputVector(const char* title, const char* id, glm::vec3* vector);
     void InputVectorSlider(const char* title, const char* id, glm::vec3* vector, float min, float max);
+
+    std::string FileOpen(int idx);
+    std::string GetRelativePath(const std::string& absolutePath, const std::string& basePath);
 private:
 	Square::Window window;
 	Square::Camera camera;
 	Square::Renderer renderer;
-	Square::Mesh* box;
+	Square::Mesh* mesh;
 	Square::Texture2D texture;
 
     Square::Light light;
@@ -46,7 +61,6 @@ private:
     ImFont* regular;
     ImFont* bold;
 private:
-    bool preferencesWindowOpen = false;
     double renderTimerTime = 0;
     double computeTimerTime = 0;
 };

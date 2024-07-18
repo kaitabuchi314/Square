@@ -28,6 +28,7 @@ project "SquareEditor"
    filter "system:windows"
        systemversion "latest"
        defines { "WINDOWS" }
+       links { "comdlg32" }
 
    filter "configurations:Debug"
        defines { "DEBUG" }
