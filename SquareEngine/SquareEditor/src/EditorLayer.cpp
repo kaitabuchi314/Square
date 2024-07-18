@@ -151,7 +151,7 @@ void EditorLayer::DrawImGui()
 
     ImGui::Text("Shine: ");
     ImGui::SameLine();
-    ImGui::SliderFloat("###inputshine", &shine, 0.1f, 10);
+    ImGui::SliderFloat("###inputshine", &shine, 0.1f, 128);
 
     ImGui::End();
 
