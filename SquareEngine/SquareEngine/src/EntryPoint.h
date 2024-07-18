@@ -2,7 +2,7 @@
 
 int MainFunction(int argc, char** argv)
 {
-	return Entry(argc, argv);
+	return Application(argc, argv);
 }
 
 int main(int argc, char** argv)

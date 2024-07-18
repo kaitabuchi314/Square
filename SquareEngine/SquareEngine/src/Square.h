@@ -12,3 +12,6 @@
 #include "ShaderProgram.h"
 #include "Renderer.h"
 #include "GameLayer.h"
+#include "MeshLoader.h"
+
+#include "Timer.h"

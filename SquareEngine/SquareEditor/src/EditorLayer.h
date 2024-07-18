@@ -21,10 +21,13 @@ private:
 	Square::Window window;
 	Square::Camera camera;
 	Square::Renderer renderer;
-	Square::Mesh box;
+	Square::Mesh* box;
 	Square::Texture2D texture;
 
     Square::Light light;
+
+    Square::Timer renderTimer;
+    Square::Timer computeTimer;
 private:
     glm::vec3 position;
     glm::vec3 rotation;
@@ -44,6 +47,8 @@ private:
     ImFont* bold;
 private:
     bool preferencesWindowOpen = false;
+    double renderTimerTime = 0;
+    double computeTimerTime = 0;
 };
 
 inline float positions[] =

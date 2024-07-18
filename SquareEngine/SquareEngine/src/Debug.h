@@ -1,10 +1,9 @@
 #pragma once
+#include <iostream>
 #include <string>
 
 namespace Square
 {
-	void Log(std::string txt);
-	void Log(const char* txt);
-	void Log(float txt);
-	void Log(int txt);
+	inline void Log(auto txt) { std::cout << txt << std::endl; };
+	inline void Log(std::string txt) { std::cout << txt << std::endl; };
 }
