@@ -1,16 +1,17 @@
 #include "EditorLayer.h"
 
-
 EditorLayer::EditorLayer() :
     window(1296, 864, "Square Editor", true),
     camera(glm::vec3(0, 0, -5), glm::vec3(0)),
     renderer(window.width, window.height),
-    box(positions, texCoords, normals, indices, sizeof(positions), sizeof(texCoords), sizeof(normals), sizeof(indices)),
-    texture(Square::loadTexture("../Assets/concrete.jpg")),
+    box(Square::loadMesh("../Assets/monkey.fbx")),
+    texture(Square::loadTexture("../Assets/Gold.png")),
     position(),
     rotation(),
     scale(1),
-    light( { glm::vec3(-500, 500, 500), glm::vec3(1.5f), 0.15f } )
+    light({ glm::vec3(-500, 500, 500), glm::vec3(1.5f), 0.15f }),
+    renderTimer(&window),
+    computeTimer(&window)
 {
 	Square::SetMainCamera(&camera);
 
@@ -21,7 +22,7 @@ EditorLayer::EditorLayer() :
     ImGuiIO& io = ImGui::GetIO(); (void)io;
 
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    
+
     regular = io.Fonts->AddFontFromFileTTF("fonts/Roboto-Regular.ttf", 15);
     bold = io.Fonts->AddFontFromFileTTF("fonts/Roboto-Bold.ttf", 15);
 
@@ -38,7 +39,8 @@ EditorLayer::~EditorLayer()
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
-    box.Flush();
+    delete box;
+
     window.Flush();
 }
 
@@ -46,11 +48,17 @@ void EditorLayer::Run(int argc, char** argv)
 {
     while (window)
     {
+        computeTimer.Start();
         MoveCamera();
 
         Square::UpdateCamera(&camera, true);
 
+        computeTimer.Stop();
+
+        renderTimer.Start();
+
         renderer.SetLight(light);
+
         renderer.BeginFrame(skyColorR*255, skyColorG*255, skyColorB*255);
 
         renderer.RenderMesh(box, shine, texture, position, rotation, scale);
@@ -58,6 +66,12 @@ void EditorLayer::Run(int argc, char** argv)
         ImGuiFrame();
 
         renderer.Resize(window.width, window.height);
+
+        renderTimer.Stop();
+
+        renderTimerTime = renderTimer;
+        computeTimerTime = computeTimer;
+
         window.EndFrame();
     }
 }
@@ -102,6 +116,8 @@ void EditorLayer::ImGuiFrame()
     ImGui::Render();
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    ImGui::EndFrame();
 }
 
 void EditorLayer::DrawImGui()
@@ -134,7 +150,6 @@ void EditorLayer::DrawImGui()
         skyColorB = skyColor[2];
     }
 
-
     ImGui::PushFont(bold);
 
     ImGui::SeparatorText("Light");
@@ -159,6 +174,12 @@ void EditorLayer::DrawImGui()
         ImGui::End();
     }
 
+    ImGui::Begin("Performance");
+
+    ImGui::Text("Compute Time: %fms.", computeTimerTime);
+    ImGui::Text("Render Time: %fms.", renderTimerTime);
+
+    ImGui::End();
 
     if (ImGui::BeginMainMenuBar())
     {

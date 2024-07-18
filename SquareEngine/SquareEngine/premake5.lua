@@ -9,7 +9,6 @@ project "SquareEngine"
 
    includedirs
    {
-	
 	"src",
     "vendor/include-glfw",
     "vendor/include-glad",
@@ -18,7 +17,7 @@ project "SquareEngine"
 
    links
    {
-    "vendor/glfw3.lib", "vendor/glfw3_mt.lib", "vendor/glfw3dll.lib"
+    "vendor/glfw3.lib", "vendor/glfw3_mt.lib", "vendor/glfw3dll.lib", "vendor/assimp-vc143-mt.lib"
    }
 
    targetdir ("../Binaries/" .. OutputDir .. "/%{prj.name}")
