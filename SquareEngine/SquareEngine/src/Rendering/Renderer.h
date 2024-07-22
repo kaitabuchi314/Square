@@ -25,4 +25,8 @@ namespace Square
 
 		glm::mat4 projection;
 	};
+
+	inline Renderer* activeRenderer;
+	inline Renderer* GetActiveRenderer() { return activeRenderer; };
+	inline void SetActiveRenderer(Renderer* renderer) { activeRenderer = renderer; };
 }

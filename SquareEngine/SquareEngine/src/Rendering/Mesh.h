@@ -7,7 +7,7 @@ namespace Square
     struct Material
     {
         Texture2D texture;
-        float shine;
+        float shine = 10;
     };
 
     class Mesh

@@ -12,6 +12,9 @@ project "SquareEditor"
 	"src",
     "vendor/ImGui",
     "../SquareEngine/src",
+    "../SquareEngine/src/Rendering",
+    "../SquareEngine/src/Application",
+    "../SquareEngine/src/Tools",
     "../SquareEngine/vendor/include-glfw",
     "../SquareEngine/vendor/include-glad",
     "../SquareEngine/vendor/include"
