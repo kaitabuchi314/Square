@@ -1,6 +1,6 @@
 #include <EditorLayer.h>
 
-int Application(int argc, char** argv)
+static int Application(int argc, char** argv)
 {
     EditorLayer editorLayer = EditorLayer();
     editorLayer.Run(argc, argv);

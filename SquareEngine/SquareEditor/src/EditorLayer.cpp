@@ -4,19 +4,14 @@ EditorLayer::EditorLayer() :
     window(1296, 864, "Square Editor", true),
     camera(glm::vec3(0, 0, -5), glm::vec3(0)),
     renderer(window.width, window.height),
-    mesh(Square::loadMesh("../Assets/monkey.fbx")),
-    position(),
-    rotation(),
-    scale(1),
     light({ glm::vec3(-500, 500, 500), glm::vec3(1.5f), 0.15f }),
     renderTimer(&window),
     computeTimer(&window),
-    meshIcon(Square::loadTexture("Resources/meshicon.png"))
+    meshIcon(Square::loadTexture("Resources/meshicon.png")),
+    scene()
 {
-    mesh->mat.shine = 10;
-    mesh->mat.texture = Square::loadTexture("../Assets/Gold.png");
-
 	Square::SetMainCamera(&camera);
+    Square::SetActiveRenderer(&renderer);
 
     renderer.SetLight(light);
 
@@ -43,8 +38,6 @@ EditorLayer::~EditorLayer()
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
-    delete mesh;
-
     window.Flush();
 }
 
@@ -53,6 +46,9 @@ void EditorLayer::Run(int argc, char** argv)
     while (window)
     {
         computeTimer.Start();
+
+        scene.Update();
+
         MoveCamera();
 
         Square::UpdateCamera(&camera, true);
@@ -65,8 +61,8 @@ void EditorLayer::Run(int argc, char** argv)
 
         renderer.BeginFrame(skyColorR*255, skyColorG*255, skyColorB*255);
 
-        renderer.RenderMesh(mesh, position, rotation, scale);
-        
+        scene.Render();
+
         ImGuiFrame();
 
         renderer.Resize(window.width, window.height);
@@ -126,55 +122,99 @@ void EditorLayer::ImGuiFrame()
 
 void EditorLayer::DrawImGui()
 {
-    static bool preferencesWindowOpen = false;
-    ImGui::Begin("Settings");
+    ImGui::Begin("Scene");
 
-    InputVector("Position: ", "###positioninput", &position);
-    InputVector("Rotation: ", "###rotationinput", &rotation);
-    InputVector("Scale: ", "###scaleinput", &scale);
-
-    ImGui::Separator();
-
-    if (ImGui::ImageButton((void*)meshIcon, ImVec2(30, 30)))
+    for (Square::Entity e : scene.AllEntities())
     {
-        std::string fn = FileOpen(2);
-        if (fn != "")
+        std::string eTag = scene.GetEntityTag(e);
+
+        if (ImGui::Button((eTag + " ").c_str()))
         {
-            Square::Material mp = mesh->mat;
-            mesh = Square::loadMesh(fn.c_str());
-            mesh->mat = mp;
-        }
-    }
+            curSelectedEntity = e;
 
-    if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
-    {
-        ImGui::SetTooltip("Load Mesh");
+            selectedEntity = true;
+        }
     }
 
     ImGui::End();
+    
+    static bool preferencesWindowOpen = false;
 
-    ImGui::Begin("Material Editor");
-    if (ImGui::ImageButton((void*)mesh->mat.texture, ImVec2(30, 30)))
+    ImGui::Begin("Settings");
+
+    if (selectedEntity)
     {
-        std::string fn = FileOpen(1);
-        if (fn != "")
+        Square::TransformComponent& tc = scene.GetComponent<Square::TransformComponent>(curSelectedEntity);
+        
+        Square::TagComponent& tagC = scene.GetComponent<Square::TagComponent>(curSelectedEntity);
+
+        ImGui::InputText("###selectedEntityName", &tagC.tag);
+
+        ImGui::SameLine();
+
+        if (ImGui::Button("+"))
         {
-            mesh->mat.texture = Square::loadTexture(fn.c_str());
+            ImGui::OpenPopup("addcomponentmenu");
+        }
+
+        if (ImGui::BeginPopup("addcomponentmenu"))
+        {
+            if (ImGui::MenuItem("Mesh Component"))
+            {
+                scene.AddComponent<Square::MeshComponent>(curSelectedEntity, "");
+                scene.ReloadMesh(curSelectedEntity);
+                scene.GetComponent<Square::MeshComponent>(curSelectedEntity).mesh->mat.texture = Square::loadTexture("Resources/grid.png");
+            }
+
+            ImGui::EndPopup();
+        }
+
+        ImGui::Separator();
+
+        InputVector("Position: ", "###positioninput", &tc.position);
+        InputVector("Rotation: ", "###rotationinput", &tc.rotation);
+        InputVector("Scale: ", "###scaleinput", &tc.scale);
+
+        if (scene.HasComponent<Square::MeshComponent>(curSelectedEntity))
+        {
+            ImGui::PushFont(bold);
+
+            ImGui::Text("Mesh Component: ");
+
+            ImGui::PopFont();
+
+            DrawMeshComponentUI();
         }
     }
+    
+    ImGui::End();
 
-    if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+    ImGui::Begin("Material Editor");
+
+    if (selectedEntity && scene.HasComponent<Square::MeshComponent>(curSelectedEntity))
     {
-        ImGui::SetTooltip("Material Base Color");
+        if (ImGui::ImageButton((void*)scene.GetComponent<Square::MeshComponent>(curSelectedEntity).mesh->mat.texture, ImVec2(30, 30)))
+        {
+            std::string fn = FileOpen(1);
+            if (fn != "")
+            {
+                scene.GetComponent<Square::MeshComponent>(curSelectedEntity).mesh->mat.texture = Square::loadTexture(fn.c_str());
+            }
+        }
+
+        if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+        {
+            ImGui::SetTooltip("Material Base Color");
+        }
+
+        ImGui::SliderFloat("###inputshine", &scene.GetComponent<Square::MeshComponent>(curSelectedEntity).mesh->mat.shine, 1, 128);
+
+        if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+        {
+            ImGui::SetTooltip("Material Specular");
+        }
     }
-
-    ImGui::SliderFloat("###inputshine", &mesh->mat.shine, 0.1f, 1024);
-
-    if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
-    {
-        ImGui::SetTooltip("Material Specular");
-    }
-
+    
     ImGui::End();
 
     ImGui::Begin("Environment");
@@ -214,15 +254,14 @@ void EditorLayer::DrawImGui()
 
         ImGui::End();
     }
-
-
+    
     ImGui::Begin("Performance");
 
     ImGui::Text("Compute Time: %fms.", computeTimerTime);
     ImGui::Text("Render Time: %fms.", renderTimerTime);
 
     ImGui::End();
-
+    
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("File"))
@@ -232,7 +271,7 @@ void EditorLayer::DrawImGui()
             ImGui::EndMenu();
         }
 
-        if (ImGui::BeginMenu("Editor"))
+        if (ImGui::BeginMenu("Edit"))
         {
             if (ImGui::MenuItem("Reset Camera"))
             {
@@ -243,6 +282,22 @@ void EditorLayer::DrawImGui()
             if (ImGui::MenuItem("Preferences"))
             {
                 preferencesWindowOpen = true;
+            }
+
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Entity"))
+        {
+            if (ImGui::MenuItem("Create"))
+            {
+                scene.AddEntityDefaultTemplate("New Entity");
+            }
+
+            if (ImGui::MenuItem("Delete"))
+            {
+                selectedEntity = false;
+                scene.DeleteEntity(curSelectedEntity);
             }
 
             ImGui::EndMenu();
@@ -266,8 +321,8 @@ void EditorLayer::SetImGuiColors()
     style.WindowMenuButtonPosition = ImGuiDir_Left;
     style.ChildRounding = 4.0f;
     style.ChildBorderSize = 1.0f;
-    style.PopupRounding = 4.0f;
-    style.PopupBorderSize = 1.0f;
+    style.PopupRounding = 0.0f;
+    style.PopupBorderSize = 0.5f;
     style.FramePadding = ImVec2(5.0f, 2.0f);
     style.FrameRounding = 3.0f;
     style.FrameBorderSize = 1.0f;
@@ -367,6 +422,38 @@ void EditorLayer::InputVectorSlider(const char* title, const char* id, glm::vec3
     vector->y = position[1];
     vector->z = position[2];
 }
+
+void EditorLayer::DrawMeshComponentUI()
+{
+    if (ImGui::ImageButton((void*)meshIcon, ImVec2(30, 30)))
+    {
+        std::string fn = FileOpen(2);
+        if (fn != "")
+        {
+            Square::MeshComponent& msh = scene.GetComponent<Square::MeshComponent>(curSelectedEntity);
+
+            bool meshExists = msh.mesh;
+
+            Square::Material mp;
+
+            if (meshExists)
+                mp = msh.mesh->mat;
+    
+            msh.meshPath = fn;
+    
+            scene.ReloadMesh(curSelectedEntity);
+            
+            if (meshExists)
+                scene.GetComponent<Square::MeshComponent>(curSelectedEntity).mesh->mat = mp;
+        }
+    }
+    
+    if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+    {
+        ImGui::SetTooltip("Load Mesh");
+    }
+}
+
 std::string EditorLayer::FileOpen(int idx)
 {
 #ifdef WINDOWS

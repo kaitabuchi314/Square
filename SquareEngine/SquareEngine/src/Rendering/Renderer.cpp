@@ -22,7 +22,7 @@ namespace Square
 
 	void Renderer::Resize(int width, int height)
 	{
-		projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 1000.0f);
 	}
 
 	void Renderer::RenderMesh(Mesh* mesh, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)

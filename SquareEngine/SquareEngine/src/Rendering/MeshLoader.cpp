@@ -87,7 +87,6 @@ namespace Square
         std::vector<float> t;
         std::vector<float> n;
 
-        // Load the mesh in a separate thread
         loadAssimp(path, v, i, t, n);
 
         Mesh* mesh = new Mesh(v.data(), t.data(), n.data(), i.data(), v.size(), t.size(), n.size(), i.size());

@@ -1,6 +1,7 @@
 #pragma once
 #include <Square.h>
 #include <imgui.h>
+#include <imgui_stdlib.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
@@ -29,6 +30,7 @@ private:
     void SetImGuiColors();
     void InputVector(const char* title, const char* id, glm::vec3* vector);
     void InputVectorSlider(const char* title, const char* id, glm::vec3* vector, float min, float max);
+    void DrawMeshComponentUI();
 
     std::string FileOpen(int idx);
     std::string GetRelativePath(const std::string& absolutePath, const std::string& basePath);
@@ -36,7 +38,6 @@ private:
 	Square::Window window;
 	Square::Camera camera;
 	Square::Renderer renderer;
-	Square::Mesh* mesh;
 
     Square::Light light;
 
@@ -44,11 +45,11 @@ private:
     Square::Timer computeTimer;
 
     Square::Texture2D meshIcon;
-private:
-    glm::vec3 position;
-    glm::vec3 rotation;
-    glm::vec3 scale;
 
+    Square::Scene scene;
+
+    Square::Entity curSelectedEntity;
+private:
     float skyColorR = 35 / 255;
     float skyColorG = 164 / 255;
     float skyColorB = 234 / 255;
@@ -61,6 +62,8 @@ private:
 private:
     double renderTimerTime = 0;
     double computeTimerTime = 0;
+
+    bool selectedEntity = false;
 };
 
 inline float positions[] =
