@@ -18,6 +18,8 @@ SquareEngine/.vs/
 *.lib
 **.exe
 *.pdb
+**.pch
+*.pch
 SquareEngine/Binaries/
 ~/SquareEngine/Binaries/
 SquareEngine/Coral.Managed/Intermediates
