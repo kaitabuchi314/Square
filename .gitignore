@@ -5,7 +5,7 @@ SquareEngine/.vs/
 ~/SquareEngine/.vs/
 /SquareEngine/.vs/~
 .vs/
-
+.Intermediates/
 **.vcxproj
 *.vcxproj
 **.vcxproj.filters
