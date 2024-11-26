@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Coral.Managed")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+60bba9bbd6b00fd5d97ab0e2b1033fea590332c0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e77e70ccd219e5ee3575958bf31f625810f8bb53")]
 [assembly: System.Reflection.AssemblyProductAttribute("Coral.Managed")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Coral.Managed")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
