@@ -5,7 +5,7 @@ project "SquareEngine"
    targetdir "Binaries/%{cfg.buildcfg}"
    staticruntime "off"
 
-   files { "src/**.h", "src/**.cpp", "src/**.inl", "vendor/glad/**.c", "vendor/TinyXML/tinyxml2.cpp" }
+   files { "src/**.h", "src/**.cpp", "src/**.inl", "Glue/Glue.cs", "vendor/glad/**.c", "vendor/TinyXML/tinyxml2.cpp" }
 
    includedirs
    {
@@ -15,12 +15,13 @@ project "SquareEngine"
     "src/Tools",
     "vendor/include-glfw",
     "vendor/include-glad",
-    "vendor/include"
+    "vendor/include",
+    "../Coral.Native/Include"
    }
 
    links
    {
-    "vendor/glfw3.lib", "vendor/glfw3_mt.lib", "vendor/glfw3dll.lib", "vendor/assimp-vc143-mt.lib"
+    "vendor/glfw3.lib", "vendor/glfw3_mt.lib", "vendor/glfw3dll.lib", "vendor/assimp-vc143-mt.lib", "Coral.Native"
    }
 
    targetdir ("../Binaries/" .. OutputDir .. "/%{prj.name}")

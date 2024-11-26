@@ -27,7 +27,7 @@ namespace Square
         // Check if the import was successful
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         {
-            Log(std::string("ERROR::ASSIMP::") + std::string(importer.GetErrorString()));
+            SQ_LOG(std::string("ERROR::ASSIMP::") + std::string(importer.GetErrorString()));
             return;
         }
 
@@ -91,7 +91,7 @@ namespace Square
 
         Mesh* mesh = new Mesh(v.data(), t.data(), n.data(), i.data(), v.size(), t.size(), n.size(), i.size());
 
-        Log(std::string("Square::MeshLoader:: Mesh ") + std::string(path) + " Loaded");
+        SQ_LOG(std::string("Square::MeshLoader:: Mesh ") + std::string(path) + " Loaded");
         return mesh;
     }
 }

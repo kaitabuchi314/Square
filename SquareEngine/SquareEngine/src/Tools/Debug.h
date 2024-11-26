@@ -2,8 +2,13 @@
 #include <iostream>
 #include <string>
 
-namespace Square
-{
-	inline void Log(auto txt) { std::cout << txt << std::endl; };
-	inline void Log(std::string txt) { std::cout << txt << std::endl; };
-}
+#ifndef DIST
+#define SQ_LOG(X) std::cout << X << std::endl;
+#endif
+
+
+#ifdef DIST
+
+#define SQ_LOG(X)
+
+#endif

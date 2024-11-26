@@ -18,7 +18,7 @@ namespace Square
 		
 		if (window == NULL)
 		{
-			Log("Failed to create GLFW window");
+			SQ_LOG("Failed to create GLFW window");
 			glfwTerminate();
 		}
 
@@ -26,7 +26,7 @@ namespace Square
 
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 		{
-			Log("Failed to initialize GLAD");
+			SQ_LOG("Failed to initialize GLAD");
 		}
 		
 		glViewport(0, 0, width, height);

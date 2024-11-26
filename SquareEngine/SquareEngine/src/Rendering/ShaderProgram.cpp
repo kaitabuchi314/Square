@@ -10,12 +10,12 @@ namespace Square
         glCompileShader(vertexShader);
 
         int success;
-        char infoLog[512];
+        char infoSQ_LOG[512];
         glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
         if (!success)
         {
-            glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-            Square::Log(std::string("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n") + std::string(infoLog));
+            glGetShaderInfoLog(vertexShader, 512, NULL, infoSQ_LOG);
+            SQ_LOG(std::string("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n") + std::string(infoSQ_LOG));
         }
 
         unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -25,8 +25,8 @@ namespace Square
         glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
         if (!success)
         {
-            glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-            Square::Log(std::string("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n") + std::string(infoLog));
+            glGetShaderInfoLog(fragmentShader, 512, NULL, infoSQ_LOG);
+            SQ_LOG(std::string("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n") + std::string(infoSQ_LOG));
         }
 
         shaderProgram = glCreateProgram();
@@ -37,8 +37,8 @@ namespace Square
         glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
         if (!success)
         {
-            glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-            Square::Log(std::string("ERROR::SHADER::PROGRAM::LINKING_FAILED\n") + std::string(infoLog));
+            glGetProgramInfoLog(shaderProgram, 512, NULL, infoSQ_LOG);
+            SQ_LOG(std::string("ERROR::SHADER::PROGRAM::LINKING_FAILED\n") + std::string(infoSQ_LOG));
         }
 
         glDeleteShader(vertexShader);

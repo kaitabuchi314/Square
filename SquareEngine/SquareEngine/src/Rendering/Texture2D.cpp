@@ -29,7 +29,7 @@ namespace Square
         }
         else
         {
-            Square::Log("Failed to load texture");
+            SQ_LOG("Failed to load texture");
         }
         stbi_image_free(data);
         return textureID;

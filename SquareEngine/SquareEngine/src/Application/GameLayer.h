@@ -7,6 +7,6 @@ namespace Square
 	public:
 		GameLayer() = default;
 		virtual ~GameLayer() {};
-		virtual void Run(int argc, char** argv) {};
+		virtual void Run() {};
 	};
 }

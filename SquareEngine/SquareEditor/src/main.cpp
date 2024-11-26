@@ -2,8 +2,8 @@
 
 static int Application(int argc, char** argv)
 {
-    EditorLayer editorLayer = EditorLayer();
-    editorLayer.Run(argc, argv);
+    EditorLayer editorLayer = EditorLayer(argc, argv);
+    editorLayer.Run();
 
     return 0;
 }

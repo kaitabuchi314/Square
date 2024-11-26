@@ -8,6 +8,7 @@ namespace Square
     {
         Texture2D texture;
         float shine = 10;
+        std::string texPath;
     };
 
     class Mesh

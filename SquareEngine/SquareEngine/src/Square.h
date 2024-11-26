@@ -16,4 +16,5 @@
 
 #include "Timer.h"
 #include "Random.h"
+#include "ApplicationState.h"
 #include "ECSManager.h"

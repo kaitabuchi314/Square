@@ -3,15 +3,24 @@
 #include <MeshLoader.h>
 #include <glm/glm.hpp>
 #include <entt.hpp>
+#include <ScriptEngine.h>
+#include "../../Coral.Native/Include/Coral/ManagedObject.hpp"
 
 namespace Square
 {
+	typedef uint32_t UU_ID;
+
 	class Scene;
 
 	struct Entity
 	{
-		entt::entity Entity;
+		entt::entity EnttEntity;
 		Scene* scene;
+
+		// Equality operator as a member function
+		bool operator==(const Entity& other) const {
+			return EnttEntity == other.EnttEntity;
+		}
 	};
 
 	struct TagComponent
@@ -37,18 +46,51 @@ namespace Square
 
 		inline MeshComponent(const std::string& m) {
 			meshPath = m;
+			mesh = nullptr;
 		};
+	};
+
+	struct ScriptObject
+	{
+		Coral::Type type;
+		Coral::ManagedObject instance;
+
+		ScriptObject operator=(const ScriptObject& other) {
+			ScriptObject temp = ScriptObject();
+			temp.type = other.type;
+			temp.instance = other.instance;
+			return temp;
+		}
+	};
+
+	struct ScriptComponent
+	{
+		std::string typeName;
+		ScriptObject sob;
+
+		inline ScriptComponent(const std::string& t) {
+			typeName = t;
+		}
 	};
 
 	class Scene
 	{
 	public:
-		Scene();
+		Scene(int argc, char** argv, const std::string& dllPath);
+		
+		void ResetAssembly(int argc, char** argv, const std::string& dllPath);
+
 		void Start();
 		void ReloadMesh(Entity e);
+		void ReloadScripts();
 		void Update();
 		void Render();
 		void Destroy();
+
+		void UpdateTransform(TransformComponent transform, UU_ID uuid);
+
+		template <typename T>
+		void RemoveComponent(Entity entity);
 
 		void DeleteEntity(Entity e);
 
@@ -64,16 +106,23 @@ namespace Square
 		Entity AddEntity();
 		Entity AddEntityDefaultTemplate(const std::string& tag);
 
-		Entity GetEntityByUUID(uint64_t uuid);
-		uint64_t GetEntityUUID(Entity e);
+		Entity GetEntityByUUID(UU_ID uuid);
+		UU_ID GetEntityUUID(Entity e);
+		UU_ID GetEntityUUID(entt::entity e);
 
 		Entity GetEntityByTag(std::string tag);
 		std::string GetEntityTag(Entity e);
 
+		void ReloadAssets();
+
 		std::vector<Entity> AllEntities();
 	private:
 		entt::registry reg;
-		std::unordered_map<uint64_t, entt::entity> entities;
+		std::unordered_map<UU_ID, entt::entity> entities;
+
+		Assembly assembly;
+		int argc;
+		char** argv = nullptr;
 	};
 
 	inline Scene* activeScene;

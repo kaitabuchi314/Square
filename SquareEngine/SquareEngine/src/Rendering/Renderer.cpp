@@ -1,28 +1,32 @@
 #include "Renderer.h"
 #include <TextureShader.h>
-
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <Light.h>
+#include <iostream>
 
 namespace Square
 {
 	Renderer::Renderer(int width, int height) :
-		program(TextureShader::vertexShaderSource, TextureShader::fragmentShaderSource)
+		program(TextureShader::vertexShaderSource, TextureShader::fragmentShaderSource),
+		texture(0) // Initialize texture ID
 	{
 		Resize(width, height);
 		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
+
 	}
 
 	void Renderer::BeginFrame(float r, float g, float b)
 	{
-		glClearColor(r / 255, g / 255, b / 255, 1);
+		glClearColor(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 	void Renderer::Resize(int width, int height)
 	{
 		projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 1000.0f);
+		glViewport(0, 0, width, height);
 	}
 
 	void Renderer::RenderMesh(Mesh* mesh, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
@@ -34,15 +38,12 @@ namespace Square
 		model = glm::scale(model, scale);
 
 		program.SetMaterialProperties(GetMainCamera()->position, mesh->mat.shine);
-
 		program.Use(model, GetMainCamera()->view, projection);
 
 		BindTexture(mesh->mat.texture, 0);
 
 		mesh->Bind();
-		
 		glDrawElements(GL_TRIANGLES, mesh->vertexCount, GL_UNSIGNED_INT, 0);
-		
 		mesh->Unbind();
 
 		UnbindTexture(mesh->mat.texture);

@@ -1,10 +1,12 @@
 #pragma once
 #include <Square.h>
+#define IMGUI_ENABLE_DOCKING
+
 #include <imgui.h>
 #include <imgui_stdlib.h>
+#include <imgui_internal.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-
 #include <filesystem>
 
 
@@ -20,9 +22,9 @@
 class EditorLayer : public Square::GameLayer
 {
 public:
-	EditorLayer();
+	EditorLayer(int arc, char** arv);
 	virtual ~EditorLayer() override;
-	virtual void Run(int argc, char** argv) override;
+	virtual void Run() override;
 private:
     void MoveCamera();
     void ImGuiFrame();
@@ -31,6 +33,7 @@ private:
     void InputVector(const char* title, const char* id, glm::vec3* vector);
     void InputVectorSlider(const char* title, const char* id, glm::vec3* vector, float min, float max);
     void DrawMeshComponentUI();
+    void DrawScriptComponentUI();
 
     std::string FileOpen(int idx);
     std::string GetRelativePath(const std::string& absolutePath, const std::string& basePath);
@@ -45,6 +48,15 @@ private:
     Square::Timer computeTimer;
 
     Square::Texture2D meshIcon;
+    Square::Texture2D menuIcon;
+    Square::Texture2D x;
+    Square::Texture2D playButton;
+    Square::Texture2D stopButton;
+    Square::Texture2D reloadIcon;
+    Square::Texture2D folderIcon;
+    Square::Texture2D meshFileIcon;
+
+    Square::Texture2D fileIcon;
 
     Square::Scene scene;
 
@@ -60,121 +72,18 @@ private:
     ImFont* bold;
     ImFont* boldXL;
 private:
-    double renderTimerTime = 0;
-    double computeTimerTime = 0;
-
     bool selectedEntity = false;
+private:
+    int argc;
+    char** argv;
+
+    bool paused = false;
+
+    std::string currentProject = "Projects/Test/";
 };
-
-inline float positions[] =
-{
-    -0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f, -0.5f,
-     0.5f,  0.5f, -0.5f,
-    -0.5f,  0.5f, -0.5f,
-
-    -0.5f, -0.5f,  0.5f,
-     0.5f, -0.5f,  0.5f,
-     0.5f,  0.5f,  0.5f,
-    -0.5f,  0.5f,  0.5f,
-
-    -0.5f,  0.5f,  0.5f,
-    -0.5f,  0.5f, -0.5f,
-    -0.5f, -0.5f, -0.5f,
-    -0.5f, -0.5f,  0.5f,
-
-     0.5f,  0.5f,  0.5f,
-     0.5f,  0.5f, -0.5f,
-     0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f,  0.5f,
-
-    -0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f,  0.5f,
-    -0.5f, -0.5f,  0.5f,
-
-    -0.5f,  0.5f, -0.5f,
-     0.5f,  0.5f, -0.5f,
-     0.5f,  0.5f,  0.5f,
-    -0.5f,  0.5f,  0.5f
-};
-
-inline float texCoords[] =
-{
-    0.0f, 0.0f,
-    1.0f, 0.0f,
-    1.0f, 1.0f,
-    0.0f, 1.0f,
-
-    0.0f, 0.0f,
-    1.0f, 0.0f,
-    1.0f, 1.0f,
-    0.0f, 1.0f,
-
-    0.0f, 1.0f,
-    0.0f, 0.0f,
-    1.0f, 0.0f,
-    1.0f, 1.0f,
-
-    1.0f, 1.0f,
-    1.0f, 0.0f,
-    0.0f, 0.0f,
-    0.0f, 1.0f,
-
-    0.0f, 1.0f,
-    1.0f, 1.0f,
-    1.0f, 0.0f,
-    0.0f, 0.0f,
-
-    0.0f, 1.0f,
-    1.0f, 1.0f,
-    1.0f, 0.0f,
-    0.0f, 0.0f
-};
-inline float normals[] =
-{
-    // Front face (-Z direction)
-    0.0f,  0.0f, -1.0f,
-    0.0f,  0.0f, -1.0f,
-    0.0f,  0.0f, -1.0f,
-    0.0f,  0.0f, -1.0f,
-
-    // Back face (+Z direction)
-    0.0f,  0.0f,  1.0f,
-    0.0f,  0.0f,  1.0f,
-    0.0f,  0.0f,  1.0f,
-    0.0f,  0.0f,  1.0f,
-
-    // Left face (-X direction)
-    -1.0f,  0.0f,  0.0f,
-    -1.0f,  0.0f,  0.0f,
-    -1.0f,  0.0f,  0.0f,
-    -1.0f,  0.0f,  0.0f,
-
-    // Right face (+X direction)
-    1.0f,  0.0f,  0.0f,
-    1.0f,  0.0f,  0.0f,
-    1.0f,  0.0f,  0.0f,
-    1.0f,  0.0f,  0.0f,
-
-    // Bottom face (-Y direction)
-    0.0f, -1.0f,  0.0f,
-    0.0f, -1.0f,  0.0f,
-    0.0f, -1.0f,  0.0f,
-    0.0f, -1.0f,  0.0f,
-
-    // Top face (+Y direction)
-    0.0f,  1.0f,  0.0f,
-    0.0f,  1.0f,  0.0f,
-    0.0f,  1.0f,  0.0f,
-    0.0f,  1.0f,  0.0f
-};
-inline int indices[] =
-{
-    0, 1, 2, 2, 3, 0,
-    4, 5, 6, 6, 7, 4,
-    8, 9, 10, 10, 11, 8,
-    12, 13, 14, 14, 15, 12,
-    16, 17, 18, 18, 19, 16,
-    20, 21, 22, 22, 23, 20
-};
+namespace math {
+    template <typename T>
+    T lerp(T start, T end, float t) {
+        return start + t * (end - start);
+    }
+}

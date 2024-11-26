@@ -980,11 +980,14 @@ CODE
 // System includes
 #include <stdio.h>      // vsnprintf, sscanf, printf
 #include <stdint.h>     // intptr_t
+#include <utility>  // For std::max
+#include <algorithm>  // For std::max
 
 // [Windows] On non-Visual Studio compilers, we default to IMGUI_DISABLE_WIN32_DEFAULT_IME_FUNCTIONS unless explicitly enabled
 #if defined(_WIN32) && !defined(_MSC_VER) && !defined(IMGUI_ENABLE_WIN32_DEFAULT_IME_FUNCTIONS) && !defined(IMGUI_DISABLE_WIN32_DEFAULT_IME_FUNCTIONS)
 #define IMGUI_DISABLE_WIN32_DEFAULT_IME_FUNCTIONS
 #endif
+#define NOMINMAX
 
 // [Windows] OS specific includes (optional)
 #if defined(_WIN32) && defined(IMGUI_DISABLE_DEFAULT_FILE_FUNCTIONS) && defined(IMGUI_DISABLE_WIN32_DEFAULT_CLIPBOARD_FUNCTIONS) && defined(IMGUI_DISABLE_WIN32_DEFAULT_IME_FUNCTIONS) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
@@ -8833,6 +8836,7 @@ ImGuiKey ImGui::GetKeyIndex(ImGuiKey key)
     const ImGuiKeyData* key_data = GetKeyData(key);
     return (ImGuiKey)(key_data - g.IO.KeysData);
 }
+
 #endif
 
 // Those names a provided for debugging purpose and are not meant to be saved persistently not compared.
@@ -21597,6 +21601,45 @@ void ImGui::DebugHookIdInfo(ImGuiID, ImGuiDataType, const void*, const void*) {}
 #include "imgui_user.inl"
 #endif
 
-//-----------------------------------------------------------------------------
-
 #endif // #ifndef IMGUI_DISABLE
+
+int convertStringToInt(const std::string& str) {
+    int result = 0;
+    for (char ch : str) {
+        int digit = ch - 'A' + 1;  // 'A' maps to 1, 'B' to 2, ..., 'Z' to 26
+        result = result * 10 + digit;
+    }
+    return result;
+}
+
+//-----------------------------------------------------------------------------
+bool ImGui::ImageButtonText(ImTextureID tex, int width, int height, int offX, int offY, const char* text)
+{
+    // Calculate the size of the text
+    ImVec2 textSize = ImGui::CalcTextSize(text);
+    ImVec2 padding = ImGui::GetStyle().FramePadding;
+
+    // Calculate the total size (image + spacing + text)
+
+    // Get the current cursor position
+    ImVec2 cursorPos = ImGui::GetCursorScreenPos();
+
+    // Draw the image button
+    int id = convertStringToInt(std::string(text) + "##");
+    ImGui::PushID(id);
+    bool pressed = ImGui::ImageButton(tex, ImVec2((float)width, (float)height));
+    ImGui::PopID();
+
+    // Calculate the text position, offset from the center
+    ImVec2 textPos;
+    textPos.x = cursorPos.x + (width - textSize.x) / 2 + offX;
+    textPos.y = cursorPos.y + (height - textSize.y) / 2 + offY;
+
+    // Get the draw list for the current window
+    ImDrawList* drawList = ImGui::GetWindowDrawList();
+
+    // Draw the text using ImGui's internal draw list
+    drawList->AddText(textPos, ImGui::GetColorU32(ImGuiCol_Text), text);
+
+    return pressed;
+}
