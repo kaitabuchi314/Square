@@ -1,0 +1,17 @@
+D:\dev\SquareEngine\SquareEngine\SquareEngine\Scripting\Binaries\Release\Testing.Managed.deps.json
+D:\dev\SquareEngine\SquareEngine\SquareEngine\Scripting\Binaries\Release\Testing.Managed.dll
+D:\dev\SquareEngine\SquareEngine\SquareEngine\Scripting\Binaries\Release\Testing.Managed.pdb
+D:\dev\SquareEngine\SquareEngine\SquareEngine\Tests\Testing.Managed\obj\Release\Testing.Managed.csproj.AssemblyReference.cache
+D:\dev\SquareEngine\SquareEngine\SquareEngine\Tests\Testing.Managed\obj\Release\Testing.Managed.GeneratedMSBuildEditorConfig.editorconfig
+D:\dev\SquareEngine\SquareEngine\SquareEngine\Tests\Testing.Managed\obj\Release\Testing.Managed.AssemblyInfoInputs.cache
+D:\dev\SquareEngine\SquareEngine\SquareEngine\Tests\Testing.Managed\obj\Release\Testing.Managed.AssemblyInfo.cs
+D:\dev\SquareEngine\SquareEngine\SquareEngine\Tests\Testing.Managed\obj\Release\Testing.Managed.csproj.CoreCompileInputs.cache
+D:\dev\SquareEngine\SquareEngine\SquareEngine\Tests\Testing.Managed\obj\Release\Testing.Managed.sourcelink.json
+D:\dev\SquareEngine\SquareEngine\SquareEngine\Tests\Testing.Managed\obj\Release\Testing.Managed.dll
+D:\dev\SquareEngine\SquareEngine\SquareEngine\Tests\Testing.Managed\obj\Release\refint\Testing.Managed.dll
+D:\dev\SquareEngine\SquareEngine\SquareEngine\Tests\Testing.Managed\obj\Release\Testing.Managed.pdb
+D:\dev\SquareEngine\SquareEngine\SquareEngine\Scripting\Assets\Testing.Managed.deps.json
+D:\dev\SquareEngine\SquareEngine\SquareEngine\Scripting\Assets\Testing.Managed.dll
+D:\dev\SquareEngine\SquareEngine\SquareEngine\Scripting\Assets\Testing.Managed.pdb
+D:\dev\SquareEngine\SquareEngine\SquareEngine\Tests\Testing.Managed\obj\Release\Testing..6B355A7A.Up2Date
+D:\dev\SquareEngine\SquareEngine\SquareEngine\Tests\Testing.Managed\obj\Release\ref\Testing.Managed.dll
