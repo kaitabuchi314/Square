@@ -1,0 +1,16 @@
+D:\dev\SquareEngine\neo\Square\SquareEngine\Projects\Test\Binaries\TestProject.deps.json
+D:\dev\SquareEngine\neo\Square\SquareEngine\Projects\Test\Binaries\TestProject.dll
+D:\dev\SquareEngine\neo\Square\SquareEngine\Projects\Test\Binaries\TestProject.pdb
+D:\dev\SquareEngine\neo\Square\SquareEngine\Projects\Test\Binaries\Coral.Managed.dll
+D:\dev\SquareEngine\neo\Square\SquareEngine\Projects\Test\Binaries\Coral.Managed.pdb
+D:\dev\SquareEngine\neo\Square\SquareEngine\Projects\Test\obj\Debug\TestProject.csproj.AssemblyReference.cache
+D:\dev\SquareEngine\neo\Square\SquareEngine\Projects\Test\obj\Debug\TestProject.GeneratedMSBuildEditorConfig.editorconfig
+D:\dev\SquareEngine\neo\Square\SquareEngine\Projects\Test\obj\Debug\TestProject.AssemblyInfoInputs.cache
+D:\dev\SquareEngine\neo\Square\SquareEngine\Projects\Test\obj\Debug\TestProject.AssemblyInfo.cs
+D:\dev\SquareEngine\neo\Square\SquareEngine\Projects\Test\obj\Debug\TestProject.csproj.CoreCompileInputs.cache
+D:\dev\SquareEngine\neo\Square\SquareEngine\Projects\Test\obj\Debug\TestProject.sourcelink.json
+D:\dev\SquareEngine\neo\Square\SquareEngine\Projects\Test\obj\Debug\TestProj.121896E9.Up2Date
+D:\dev\SquareEngine\neo\Square\SquareEngine\Projects\Test\obj\Debug\TestProject.dll
+D:\dev\SquareEngine\neo\Square\SquareEngine\Projects\Test\obj\Debug\refint\TestProject.dll
+D:\dev\SquareEngine\neo\Square\SquareEngine\Projects\Test\obj\Debug\TestProject.pdb
+D:\dev\SquareEngine\neo\Square\SquareEngine\Projects\Test\obj\Debug\ref\TestProject.dll

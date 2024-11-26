@@ -14,8 +14,7 @@ SquareEngine/.vs/
 *.vcxproj.user
 **.obj
 *.obj
-**.lib
-*.lib
+
 **.exe
 *.pdb
 **.pch
