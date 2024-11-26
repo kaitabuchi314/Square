@@ -20,3 +20,10 @@ SquareEngine/.vs/
 *.pdb
 SquareEngine/Binaries/
 ~/SquareEngine/Binaries/
+SquareEngine/Coral.Managed/Intermediates
+SquareEngine/Coral.Managed/Binaries
+SquareEngine/Coral.Managed/obj
+
+SquareEngine/Coral.Native/Intermediates
+SquareEngine/Coral.Native/Binaries
+SquareEngine/Coral.Native/Build
